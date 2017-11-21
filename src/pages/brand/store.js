@@ -6,6 +6,7 @@ import Reflux from 'reflux';
 import Actions from './action';
 import {urlhttp,urlhttps} from '../../app/url';
 import {hashHistory} from 'react-router';
+import qs from 'qs';
 
 var Store =  Reflux.createStore({
     //监听所有的actions
@@ -27,11 +28,14 @@ var Store =  Reflux.createStore({
     },
     onGetBrandList:function(token,page,cb){
         let t = this;
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("page",page);
-        obj.append("page_size","10");
-        fetch(urlhttp+"/admin.shop_brand/getlist",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token,
+            page:page,
+            page_size:10
+        });
+        fetch(urlhttp+"/admin.shop_brand/getlist",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -52,10 +56,13 @@ var Store =  Reflux.createStore({
     },
     onGetCasListOne:function(token){
         let t = this;
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("goods_class_parent_id",0);
-        fetch(urlhttp+"/admin.shop_goods_class/public_getlist",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token,
+            goods_class_parent_id:0
+        });
+        fetch(urlhttp+"/admin.shop_goods_class/public_getlist",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -74,10 +81,13 @@ var Store =  Reflux.createStore({
     },
     onGetCascaderList:function(token,id,n){
         let t = this;
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("goods_class_parent_id",id);
-        fetch(urlhttp+"/admin.shop_goods_class/public_getlist",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token,
+            goods_class_parent_id:id
+        });
+        fetch(urlhttp+"/admin.shop_goods_class/public_getlist",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -102,11 +112,14 @@ var Store =  Reflux.createStore({
     onEditorList:function(token,id,cb){
         let t = this;
         let imgObj = [];
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("brand_id",id);
-        obj.append("update", 0);
-        fetch(urlhttp+"/admin.shop_brand/editone",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token,
+            brand_id:id,
+            update:0
+        });
+        fetch(urlhttp+"/admin.shop_brand/editone",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -141,17 +154,20 @@ var Store =  Reflux.createStore({
              goods_name = values['goods_class_name1'];
         }
         let arr = goods_name.split(',');
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("brand_name",values["brand_name"]);
-        obj.append("brand_initial",values["brand_initial"]);
-        obj.append("goods_class_id", arr[0]);
-        obj.append("goods_class_name", arr[1]);
-        obj.append("brand_pic", values["brand_pic"][0].response.data.url);
-        obj.append("brand_recommend", values["brand_recommend"]);
-        obj.append("show_type", values["show_type"]);
-        obj.append("sort_order", values["sort_order"]);
-        fetch(urlhttp+"/admin.shop_brand/addone",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token,
+            brand_name:values.brand_name,
+            brand_initial:values.brand_initial,
+            goods_class_id:arr[0],
+            goods_class_name:arr[1],
+            brand_pic:values["brand_pic"][0].response.data.url,
+            brand_recommend:values.brand_recommend,
+            show_type:values.show_type,
+            sort_order:values.sort_order
+        });
+        fetch(urlhttp+"/admin.shop_brand/addone",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -182,19 +198,22 @@ var Store =  Reflux.createStore({
             goods_name = values['goods_class_id']+','+values['goods_class_name'];
          }
         let arr = goods_name.split(',');
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("brand_name",values["brand_name"]);
-        obj.append("brand_initial",values["brand_initial"]);
-        obj.append("goods_class_id", arr[0]);
-        obj.append("goods_class_name", arr[1]);
-        obj.append("brand_pic", values["brand_pic"][0].url?values["brand_pic"][0].url:values["brand_pic"][0].response.data.url);
-        obj.append("brand_recommend", values["brand_recommend"]);
-        obj.append("show_type", values["show_type"]);
-        obj.append("sort_order", values["sort_order"]);
-        obj.append("brand_id",values["brand_id"]);
-        obj.append("update", 1);
-        fetch(urlhttp+"/admin.shop_brand/editone",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token,
+            brand_name:values.brand_name,
+            brand_initial:values.brand_initial,
+            goods_class_id:arr[0],
+            goods_class_name:arr[1],
+            brand_pic:values["brand_pic"][0].url?values["brand_pic"][0].url:values["brand_pic"][0].response.data.url,
+            brand_recommend:values.brand_recommend,
+            show_type:values.show_type,
+            sort_order:values.sort_order,
+            brand_id:values.brand_id,
+            update:1
+        });
+        fetch(urlhttp+"/admin.shop_brand/editone",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){

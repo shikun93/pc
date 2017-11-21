@@ -6,6 +6,7 @@ import Reflux from 'reflux';
 import Actions from './action';
 import {urlhttp,urlhttps} from '../../app/url';
 import {hashHistory} from 'react-router';
+import qs from 'qs';
 
 var Store =  Reflux.createStore({
     //监听所有的actions
@@ -20,10 +21,12 @@ var Store =  Reflux.createStore({
     },
     onGetList:function(token,page,cb){
         let t = this;
-        let obj = new FormData();
-        obj.append("admin_token",token);
-
-        fetch(urlhttp+"/admin.shop_store_grade/getlist",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token
+        });
+        fetch(urlhttp+"/admin.shop_store_grade/getlist",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -49,16 +52,19 @@ var Store =  Reflux.createStore({
     },
     onAddShopGrade:function(token,values,Actions,cb){
         let t = this;
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("store_grade_name",values["store_grade_name"]);
-        obj.append("store_grade_goods_limit",values["store_grade_goods_limit"]);
-        obj.append("store_grade_album_limit",values["store_grade_album_limit"]);
-        obj.append("store_grade_function",'');
-        obj.append("store_grade_price",values["store_grade_price"]);
-        obj.append("store_grade_description",values["store_grade_description"]);
-        obj.append("sort_order", values["sort_order"]);
-        fetch(urlhttp+"/admin.shop_store_grade/addone",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token,
+            store_grade_name:values.store_grade_name,
+            store_grade_goods_limit:values.store_grade_goods_limit,
+            store_grade_album_limit:values.store_grade_album_limit,
+            store_grade_function:'',
+            store_grade_price:values.store_grade_price,
+            store_grade_description:values.store_grade_description,
+            sort_order:values.sort_order
+        });
+        fetch(urlhttp+"/admin.shop_store_grade/addone",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -76,11 +82,14 @@ var Store =  Reflux.createStore({
     },
     onGetEditorList:function(token,id,cd){
         let t = this;
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("store_grade_id",id);
-        obj.append("update",0);
-        fetch(urlhttp+"/admin.shop_store_grade/editone",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token,
+            store_grade_id:id,
+            update:0
+        });
+        fetch(urlhttp+"/admin.shop_store_grade/editone",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -98,18 +107,21 @@ var Store =  Reflux.createStore({
     },
     onEditorOk:function(token,values,Actions,cb){
         let t = this;
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("store_grade_id",values["store_grade_id"]);
-        obj.append("store_grade_name",values["store_grade_name"]);
-        obj.append("store_grade_goods_limit",values["store_grade_goods_limit"]);
-        obj.append("store_grade_album_limit",values["store_grade_album_limit"]);
-        obj.append("store_grade_function",'');
-        obj.append("store_grade_price",values["store_grade_price"]);
-        obj.append("store_grade_description",values["store_grade_description"]);
-        obj.append("sort_order", values["sort_order"]);
-        obj.append("update",1);
-        fetch(urlhttp+"/admin.shop_store_grade/editone",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token,
+            store_grade_id:values.store_grade_id,
+            store_grade_name:values.store_grade_name,
+            store_grade_goods_limit:values.store_grade_goods_limit,
+            store_grade_album_limit:values.store_grade_album_limit,
+            store_grade_function:'',
+            store_grade_price:values.store_grade_price,
+            store_grade_description:values.store_grade_description,
+            sort_order:values.sort_order,
+            update:1
+        });
+        fetch(urlhttp+"/admin.shop_store_grade/editone",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){

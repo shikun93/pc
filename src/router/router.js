@@ -6,6 +6,8 @@ import ReactDOM from 'react-dom';
 import { Router, Route,IndexRoute, hashHistory} from 'react-router';
 import _ from 'lodash';
 import 'antd/dist/antd.less';
+require('es5-shim');
+require('es5-shim/es5-sham');
 require("es6-promise");
 require("whatwg-fetch");
 

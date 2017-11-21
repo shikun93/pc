@@ -6,6 +6,7 @@ import Reflux from 'reflux';
 import Actions from './action';
 import {urlhttp,urlhttps} from '../../app/url';
 import {hashHistory} from 'react-router';
+import qs from 'qs';
 
 var Store =  Reflux.createStore({
     //监听所有的actions
@@ -31,11 +32,14 @@ var Store =  Reflux.createStore({
     },
     onGetList:function(token,page,cb){
         let t = this;
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("page",page);
-        obj.append("page_size","10");
-        fetch(urlhttps+"/admin.shop_goods_type/getlist",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token,
+            page:page,
+            page_size:10
+        });
+        fetch(urlhttps+"/admin.shop_goods_type/getlist",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -56,9 +60,12 @@ var Store =  Reflux.createStore({
     },
     onGetBrandList:function(token){
         let t = this;
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        fetch(urlhttps+"/admin.shop_brand/getlist",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token
+        });
+        fetch(urlhttps+"/admin.shop_brand/getlist",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -81,10 +88,13 @@ var Store =  Reflux.createStore({
         });
     },
      onGetSpecList:function(token){
-         let t = this;
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        fetch(urlhttps+"/admin.shop_goods_spec/selectgoodsspeclist",{method:"post",body:obj})
+        let t = this;
+        let obj = qs.stringify({
+            admin_token:token
+        });
+        fetch(urlhttps+"/admin.shop_goods_spec/selectgoodsspeclist",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -111,10 +121,13 @@ var Store =  Reflux.createStore({
     },
     onGetCasListOne:function(token){
         let t = this;
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("goods_class_parent_id",0);
-        fetch(urlhttp+"/admin.shop_goods_class/public_getlist",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token,
+            goods_class_parent_id:0
+        });
+        fetch(urlhttp+"/admin.shop_goods_class/public_getlist",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -133,10 +146,13 @@ var Store =  Reflux.createStore({
     },
     onGetCascaderList:function(token,id,n){
         let t = this;
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("goods_class_parent_id",id);
-        fetch(urlhttp+"/admin.shop_goods_class/public_getlist",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token,
+            goods_class_parent_id:id
+        });
+        fetch(urlhttp+"/admin.shop_goods_class/public_getlist",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -160,11 +176,14 @@ var Store =  Reflux.createStore({
     },
     onEditorList:function(token,id,cb){
         let t = this;
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("goods_type_id",id);
-        obj.append("update", 0);
-        fetch(urlhttp+"/admin.shop_goods_type/editone",{method:"post",body:obj})
+        let obj = qs.stringify({
+            admin_token:token,
+            goods_type_id:id,
+            update:0
+        });
+        fetch(urlhttp+"/admin.shop_goods_type/editone",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -238,27 +257,28 @@ var Store =  Reflux.createStore({
              goods_name = values['goods_class_name1'];
         }
         let arr = goods_name.split(',');
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("goods_type_name",values["goods_type_name"]);
-        obj.append("sort_order", values["sort_order"]);
-        obj.append("goods_class_id", arr[0]);
-        obj.append("goods_class_name", arr[1]);
+        let obj = {
+            admin_token:token,
+            goods_type_name:values.goods_type_name,
+            sort_order:values.sort_order,
+            goods_class_id:arr[0],
+            goods_class_name:arr[1]
+        };
         for(let i=0;i<values['brand_id'].length;i++ ){
-            obj.append("brand_id["+i+"]", values['brand_id'][i]);
+            obj["brand_id["+i+"]"] = values['brand_id'][i];
         }
-         for(let j=0;j<values['goods_spec_id'].length;j++ ){
-            obj.append("goods_spec_id["+j+"]", values['goods_spec_id'][j]);
+        for(let j=0;j<values['goods_spec_id'].length;j++ ){
+            obj["goods_spec_id["+j+"]"] = values['goods_spec_id'][j];
         }
         let k = 0;
         for(let key in values){
             if(typeof key == 'string'){
                 if(key.slice(0,key.length-1)=='ais_show'||key.slice(0,key.length)=='ais_show'){
                     let bs =parseInt(key.slice(-1))>=0?key.slice(-1):'';
-                    obj.append("goods_attr["+k+"][goods_attr_name]", values['goods_attr_name'+bs]);
-                    obj.append("goods_attr["+k+"][goods_attr_value]", values['goods_attr_value'+bs]);
-                    obj.append("goods_attr["+k+"][sort_order]", values['asort_order'+bs]);
-                    obj.append("goods_attr["+k+"][is_show]", values[key]);
+                    obj["goods_attr["+k+"][goods_attr_name]"] = values['goods_attr_name'+bs];
+                    obj["goods_attr["+k+"][goods_attr_value]"] = values['goods_attr_value'+bs];
+                    obj["goods_attr["+k+"][sort_order]"] = values['asort_order'+bs];
+                    obj["goods_attr["+k+"][is_show]"] = values[key];
                     k++;
                 }
             }
@@ -269,13 +289,15 @@ var Store =  Reflux.createStore({
         for(let key in values){
             if(typeof key == 'string'){
                 if(key.slice(0,key.length-1)=='goods_type_custom'||key.slice(0,key.length)=='goods_type_custom'){
-                    obj.append("goods_type_custom["+l+"]", values[key]);
+                    obj["goods_type_custom["+l+"]"] = values[key];
                     l++;
                 }  
             }
         }
-
-        fetch(urlhttp+"/admin.shop_goods_type/addone",{method:"post",body:obj})
+        obj = qs.stringify(obj);
+        fetch(urlhttp+"/admin.shop_goods_type/addone",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){
@@ -295,7 +317,6 @@ var Store =  Reflux.createStore({
         });
     },
     onEditorSuccess:function(token,values,Actions,page,cb,removezdId,removesxId){
-        console.log(removezdId,removesxId,values);
         let t = this;
         let goods_name ='';
         if(values["goods_class_name3"]!=undefined){
@@ -308,44 +329,44 @@ var Store =  Reflux.createStore({
             goods_name = values['goods_class_id']+','+values['goods_class_name'];
          }
         let arr = goods_name.split(',');
-        let obj = new FormData();
-        obj.append("admin_token",token);
-        obj.append("goods_type_id",values["goods_type_id"]);
-        obj.append("goods_type_name",values["goods_type_name"]);
-        obj.append("sort_order", values["sort_order"]);
-        obj.append("goods_class_id", arr[0]);
-        obj.append("goods_class_name", arr[1]);
-        obj.append("update", 1);
+        let obj = {
+            admin_token:token,
+            goods_type_id:values.goods_type_id,
+            goods_type_name:values.goods_type_name,
+            sort_order:values.sort_order,
+            goods_class_id:arr[0],
+            goods_class_name:arr[1],
+            update:1
+        };
         removezdId.map(function(item,index){
-            obj.append("goods_type_custom["+item+"][del]", 1);
+            obj["goods_type_custom["+item+"][del]"] = 1;
         })
 
         removesxId.map(function(item,index){
-            obj.append("goods_attr_del["+index+"]", item);
+            obj["goods_attr_del["+index+"]"] = item;
         })
 
         for(let i=0;i<values['brand_id'].length;i++ ){
-            obj.append("brand_id["+i+"]", values['brand_id'][i]);
+            obj["brand_id["+i+"]"] = values['brand_id'][i];
         }
          for(let j=0;j<values['goods_spec_id'].length;j++ ){
-            obj.append("goods_spec_id["+j+"]", values['goods_spec_id'][j]);
+            obj["goods_spec_id["+j+"]"] = values['goods_spec_id'][j];
         }
         let k = 0;
         for(let key in values){
-             console.log(values[key]);
             if(typeof key == 'string'){
                 if(key.slice(0,key.length-1)=='goods_attr_name'||key.slice(0,key.length)=='goods_attr_name'){
 
                     let bs =parseInt(key.slice(-1))>=0?key.slice(-1):'';
-                    obj.append("goods_attr["+k+"][goods_attr_name]", values[key]);
-                    obj.append("goods_attr["+k+"][goods_attr_value]", values['goods_attr_value'+bs]);
-                    obj.append("goods_attr["+k+"][sort_order]", values['asort_order'+bs]);
-                    obj.append("goods_attr["+k+"][is_show]", values['ais_show'+bs]);
+                    obj["goods_attr["+k+"][goods_attr_name]"] = values[key];
+                    obj["goods_attr["+k+"][goods_attr_value]"] = values['goods_attr_value'+bs];
+                    obj["goods_attr["+k+"][sort_order]"] = values['asort_order'+bs];
+                    obj["goods_attr["+k+"][is_show]"] = values['ais_show'+bs];
                     if(values['goods_attr_id'+bs]!=undefined){
-                        obj.append("goods_attr["+k+"][goods_attr_id]", values['goods_attr_id'+bs]);
-                        obj.append("goods_attr["+k+"][form_submit]", 1);
+                        obj["goods_attr["+k+"][goods_attr_id]"] = values['goods_attr_id'+bs];
+                        obj["goods_attr["+k+"][form_submit]"] = 1;
                     }else{
-                        obj.append("goods_attr["+k+"][form_submit]", 0);
+                        obj["goods_attr["+k+"][form_submit]"] = 0;
                     }
                     k++;
                 }
@@ -358,16 +379,18 @@ var Store =  Reflux.createStore({
                     let bs =parseInt(key.slice(-1))>=0?key.slice(-1):'';
                     let id =values['goods_type_custom_id'+bs];
                     if(!isNaN(parseInt(id))){
-                        obj.append("goods_type_custom["+id+"][goods_type_custom_name]", values[key]);
+                        obj["goods_type_custom["+id+"][goods_type_custom_name]"] = values[key];
                     }else{
-                        obj.append("goods_type_custom_new["+l+"]", values[key]);
+                        obj["goods_type_custom_new["+l+"]"] = values[key];
                         l++;
                     }
                 }  
             }
         }
-
-        fetch(urlhttp+"/admin.shop_goods_type/editone",{method:"post",body:obj})
+        obj = qs.stringify(obj);
+        fetch(urlhttp+"/admin.shop_goods_type/editone",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
             .then(function(response){
                 return response.json();
             }).then(function(result){

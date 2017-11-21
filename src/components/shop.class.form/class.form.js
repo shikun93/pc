@@ -128,7 +128,7 @@ class ShopTypeForm extends React.Component {
                 initialValue: t.props.typePopPu == "edit"?t.props.formdata['goods_type_name']:"",
             })(
                 <RadioGroup>
-                    <Radio vlaue='0'>无类型</Radio>
+                    <Radio value="0">无类型</Radio>
                     {arr}
                 </RadioGroup>
             )}

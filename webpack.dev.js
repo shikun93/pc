@@ -32,6 +32,12 @@ module.exports = {
             { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=1000&name=images/[name].[ext]' }
 
         ],
+        postLoaders: [
+            {
+                test: /\.js$/,
+                loaders: ['es3ify-loader']
+            }
+        ]
     },
     //热启动配置
     devServer:{
@@ -59,15 +65,22 @@ module.exports = {
             minChunks: Infinity
         }),
         new webpack.optimize.UglifyJsPlugin({
-            compressor: {
-                warnings: false,
+            compress: {
+                properties: false,
+                warnings: false
             },
-            //sourceMap: true,
-            except: ['$', 'exports', 'require'] //排除关键字
+            output: {
+                beautify: true,
+                quote_keys: true
+            },
+            mangle: {
+                screw_ie8: false
+            },
+            sourceMap: false
         }),
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify('production')
+                NODE_ENV: JSON.stringify('development')
             }
         }),
         new HtmlWebpackPlugin({
