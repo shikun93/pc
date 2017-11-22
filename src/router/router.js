@@ -6,8 +6,6 @@ import ReactDOM from 'react-dom';
 import { Router, Route,IndexRoute, hashHistory} from 'react-router';
 import _ from 'lodash';
 import 'antd/dist/antd.less';
-require('es5-shim');
-require('es5-shim/es5-sham');
 require("es6-promise");
 require("whatwg-fetch");
 
@@ -42,12 +40,14 @@ import AdminLog from '../pages/admin.log/admin.log';
 import ShopGrade from '../pages/shop.grade/shop.grade';
 import ShopClass from '../pages/shop.class/shop.class';
 import OwnStore from '../pages/own.store/own.store';
+import ShopMember from '../pages/shop.member/shop.member';
+import ShopOrder from '../pages/shop.order/shop.order';
 
 ReactDOM.render(
     <Router history = {hashHistory}>
         <Route path="/" component={Login} />
         <Route path="/main" component={Main} >
-            <IndexRoute path="home" component={Home}/>
+            <IndexRoute component={Home}/>
             <Route path="home" component={Home} />
             <Route path="table" component={Table1} />
             <Route path="adminGroup" component={AdminGroup} />
@@ -77,6 +77,8 @@ ReactDOM.render(
             <Route path="shopGrade" component={ShopGrade} />
             <Route path="shopClass" component={ShopClass} />
             <Route path="ownStore" component={OwnStore} />
+            <Route path="shopMember" component={ShopMember} />
+            <Route path="shopOrder" component={ShopOrder} />
         </Route>
     </Router>
 ,document.getElementById('app'));

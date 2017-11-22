@@ -56,13 +56,13 @@ class Login extends React.Component{
                             <div role="tabpanel" className="tab-pane active" id="home">
                                 <form  className="form-horizontal login_form" >
                                     <div className="form-group">
-                                        <label for="inputEmail3" className="col-sm-3 control-label">用户名</label>
+                                        <label htmlFor="inputEmail3" className="col-sm-3 control-label">用户名</label>
                                         <div className="col-sm-9">
                                         <input ref="input1" type="text" className="form-control" id="inputEmail3" placeholder="username" value={t.state.username} onChange={t.changeValue}/>
                                         </div>
                                     </div>
                                     <div className="form-group">
-                                        <label for="inputPassword3" className="col-sm-3 control-label">密码</label>
+                                        <label htmlFor="inputPassword3" className="col-sm-3 control-label">密码</label>
                                         <div className="col-sm-9">
                                         <input ref="input2" type="password" className="form-control" id="inputPassword3" placeholder="Password" value={t.state.password} onChange={t.changeValue} />
                                         </div>

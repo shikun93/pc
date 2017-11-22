@@ -5,9 +5,10 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Breadcrumb,message,Button,Table,Form,Input,Checkbox,Modal} from 'antd';
+import { Breadcrumb,message,Button,Table,Form,Input,Radio,Modal,Upload} from 'antd';
 const FormItem = Form.Item;
-import './shop.grade.less';
+const RadioGroup = Radio.Group;
+import './shop.member.less';
 
 const formItemLayout = {
     labelCol: {
@@ -26,15 +27,35 @@ const cb =function(err){
 
 
 //修改/添加公用表单
-class ShopGradeForm extends React.Component {
+class ShopMemberForm extends React.Component {
     state = {
-        
+        imgValue1:''
     };
+
+    componentDidMount(){
+        let t = this;
+        if(t.props.typePopPu == "edit"){
+            this.setState({imgValue1:t.props.formdata.member_avatar.url});
+        }
+    }
+
+    normFile = (e) => {
+       if(e.file.response){
+        this.setState({imgValue1:e.file.response.data.file});
+       }
+       
+        if (Array.isArray(e)) {
+          return e;
+        }
+        return e && e.fileList;
+    }
 
 
     render() {
 
         let t = this;
+        console.log();
+        let token = sessionStorage.getItem("admin_token");
         const { getFieldDecorator } = this.props.form;
         return (
             <Modal
@@ -43,27 +64,29 @@ class ShopGradeForm extends React.Component {
             wrapClassName="shop_form"
             onCancel={this.props.cancel}
             closable ={false}
+            title = "会员添加"
             onOk={this.props.ok.bind(this)}
             >
             <Form>
             <FormItem
                 {...formItemLayout}
             >
-            {getFieldDecorator('store_grade_id', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["store_grade_id"]:"",
+            {getFieldDecorator('member_id', {
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata["member_id"]:"",
             })(
                 <Input  style={{"display":"none"}}/>
             )}
             </FormItem>
             <FormItem
                 {...formItemLayout}
-                label="等级名称"
+                label="会员"
                 hasFeedback
+                extra="3-15位字符，可由中文、英文、数字及“_”、“-”组成。"
             >
-            {getFieldDecorator('store_grade_name', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["store_grade_name"]:"",
+            {getFieldDecorator('member_name', {
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata["member_name"]:"",
                 rules: [ {
-                    required: true, message: 'Please input your store_grade_name!',
+                    required: true, message: 'Please input your member_name!',
                 }],
             })(
                 <Input />
@@ -71,80 +94,100 @@ class ShopGradeForm extends React.Component {
             </FormItem>
             <FormItem
                 {...formItemLayout}
-                label="可发布商品数"
+                label="密码"
                 hasFeedback
-                extra="0表示没有限制"
+                extra="6-20位字符，可由英文、数字及标点符号组成。"
             >
-            {getFieldDecorator('store_grade_goods_limit', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata.store_grade_goods_limit:"0",
+            {getFieldDecorator('member_password', {
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata.member_password:"",
+                rules: [ {
+                    required: true, message: 'Please input your member_password!',
+                }],
             })(
-                <Input type="number"/>
+                <Input type="password"/>
             )}
             </FormItem>
             <FormItem
             {...formItemLayout}
-            label="可上传图片数"
-            extra="0表示没有限制"
+            label="电子邮箱"
+            extra="请输入常用的邮箱，将用来找回密码、接受订单通知等。"
             hasFeedback >
-            {getFieldDecorator('store_grade_album_limit', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["store_grade_album_limit"]:"0",
+            {getFieldDecorator('member_email', {
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata["member_email"]:"",
+                rules: [ {
+                    required: true, message: 'Please input your member_email!',
+                },{
+                    type: 'email', message: 'The input is not valid E-mail!',
+                }],
             })(
-                <Input type="number" />
+                <Input />
             )}
             </FormItem>
             <FormItem
             {...formItemLayout}
-            label="可选模板套数"
+            label="真实姓名"
             hasFeedback >
-                <p>0 (在店铺等级列表设置)</p>
+            {getFieldDecorator('member_truename', {
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata["member_truename"]:"",
+            })(
+                <Input />
+            )}
             </FormItem>
             <FormItem
             {...formItemLayout}
-            label="可用附加功能"
+            label="性别"
             >
-                {getFieldDecorator('store_grade_function', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["store_grade_function"]:false,
+                {getFieldDecorator('member_sex', {
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata["member_sex"]:'',
                 })(
-                    <Checkbox>编辑器多媒体功能</Checkbox>
+                    <RadioGroup>
+                      <Radio value="0">保密</Radio>
+                      <Radio value="1">男</Radio>
+                      <Radio value="2">女</Radio>
+                    </RadioGroup>
                 )} 
             </FormItem>
             <FormItem
                 {...formItemLayout}
-                label="收费标准"
+                label="QQ"
                 hasFeedback
-                extra="收费标准，单：元/年，必须为数字，在会员开通或升级店铺时将显示在前台"
             >
-            {getFieldDecorator('store_grade_price', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["store_grade_price"]:"",
-                 rules: [ {
-                    required: true, message: 'Please input your store_grade_price!',
-                }],
+            {getFieldDecorator('member_qq', {
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata["member_qq"]:"",
             })(
-                <Input type="number"/>
+                <Input />
             )}
             </FormItem>
             <FormItem
                 {...formItemLayout}
-                label="申请说明"
+                label="阿里旺旺"
                 hasFeedback
-                extra="申请说明，在会员开通或升级店铺时将显示在前台"
             >
-            {getFieldDecorator('store_grade_description', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["store_grade_description"]:"",
+            {getFieldDecorator('member_ww', {
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata["member_ww"]:"",
             })(
-                <Input type="textarea" rows={4}/>
+                <Input />
             )}
             </FormItem>
             <FormItem
                 {...formItemLayout}
-                label="级别"
-                hasFeedback
-                extra="数值越大表明级别越高"
+                label="头像"
             >
-            {getFieldDecorator('sort_order', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["sort_order"]:"",
-            })(
-                <Input type="number"/>
+             {getFieldDecorator('member_avatar', {
+                    valuePropName: 'fileList',
+                    getValueFromEvent: this.normFile,
+                    initialValue:t.props.typePopPu == "edit"?t.props.formdata["member_avatar"]:"",
+                })(
+                  <Upload
+                    action={urlhttp+"/admin.shop_setting/uploadimage"}
+                    data={{admin_token:token,file_name:"default_goods_image"}}
+                    name="img"
+                    showUploadList={false}
+                    >
+                    <div>
+                       <Input addonAfter="选择上传" disabled value={t.state.imgValue1}/>
+                    </div>
+                </Upload>
             )}
             </FormItem>
         </Form>
@@ -153,11 +196,11 @@ class ShopGradeForm extends React.Component {
     }
 }
 
-const ShopGradesForm = Form.create()(ShopGradeForm);
+const ShopMembersForm = Form.create()(ShopMemberForm);
 
 
 //组件类
-class ShopGrade extends React.Component {
+class ShopMember extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -200,7 +243,7 @@ class ShopGrade extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addShopGrade(obj,values,Actions,cb);
+                Actions.addShopMember(obj,values,Actions,cb);
             }
         });
     }
@@ -217,47 +260,106 @@ class ShopGrade extends React.Component {
 
     shopForm1(){
         let t = this;
-        return t.state.visible?<ShopGradesForm cancel={t.handleCancel} ok={t.handleOk}/>:"";
+        return t.state.visible?<ShopMembersForm cancel={t.handleCancel} ok={t.handleOk}/>:"";
     }
 
     shopForm2(){
         let t = this;
-        return t.state.editorVisible?<ShopGradesForm cancel={t.handleCancel} ok={t.editorOk} typePopPu="edit" formdata={t.state.editorList}/>:"";
+        return t.state.editorVisible?<ShopMembersForm cancel={t.handleCancel} ok={t.editorOk} typePopPu="edit" formdata={t.state.editorList}/>:"";
     }
     
     render() {
         let t = this;
         const columns = [{
-                dataIndex: 'store_grade_id',
-                render: text => <span style={{"display":"none"}}>{text}</span>,
+                title: '会员ID',
+                dataIndex: 'member_id',
+                width:70,
+                fixed: 'left' 
             },{
-                title: '级别',
-                dataIndex: 'sort_order',
+                title: '会员名称',
+                dataIndex: 'member_name',
+                fixed: 'left',
+                width:100
             },{
-                title: '等级名称',
-                dataIndex: 'store_grade_name'
+                title: '会员邮箱',
+                dataIndex: 'member_email',
+                width:150
             },{
-                title: '可发布商品数',
-                dataIndex: 'store_grade_goods_limit',
+                 title: '会员手机',
+                 dataIndex: 'member_mobile',
+                 width:150
             },{
-                 title: '可上传图片数',
-                 dataIndex: 'store_grade_album_limit',
+                title: '会员性别',
+                dataIndex: 'member_sex',
+                width:100
             },{
-                title: '可选模板套数',
-                dataIndex: 'store_grade_template_number',
+                title: '真实姓名',
+                dataIndex: 'member_truename',
+                width:80
             },{
-                title: '收费标准',
-                dataIndex: 'store_grade_price',
-                render: text => <span>{text}元/年</span>,
+                title: '出生日期',
+                dataIndex: 'member_birthday',
+                width:100
+            },{
+                title: '注册时间',
+                dataIndex: 'member_time',
+                width:100
+            },{
+                title: '最后登录时间',
+                dataIndex: 'member_login_time',
+                width:150
+            },{
+                title: '最后登录IP',
+                dataIndex: 'member_login_ip',
+                width:150
+            },{
+                title: '会员积分',
+                dataIndex: 'member_points',
+                width:80
+            },{
+                title: '会员经验',
+                dataIndex: 'member_exppoints',
+                width:100
+            },{
+                title: '会员等级',
+                dataIndex: 'member_grade',
+                width:80
+            },{
+                title: '可用预存款(元)',
+                dataIndex: 'available_predeposit',
+                width:150
+            },{
+                title: '冻结预存款(元)',
+                dataIndex: 'freeze_predeposit',
+                width:150
+            },{
+                title: '可用充值卡(元)',
+                dataIndex: 'available_rc_balance',
+                width:150
+            },{
+                title: '冻结充值卡(元)',
+                dataIndex: 'freeze_rc_balance',
+                width:150
+            },{
+                title: '允许举报',
+                dataIndex: 'inform_allow',
+                width:80
+            },{
+                title: '允许购买',
+                dataIndex: 'is_buy',
+                width:80
+            },{
+                title: '允许咨询',
+                dataIndex: 'is_allowtalk',
+                width:80
             },{
                 title: '操作',
-                    width:100,
+                    width:80,
                     key: 'action',
+                    fixed: 'right', 
                     render: (text, record) => (
                     <span>
-                        <a onClick={t.remove.bind(t,record["store_grade_id"])}>删除</a>
-                        <span className="ant-divider" />
-                        <a onClick={this.amend.bind(t,record["store_grade_id"])}>修改</a>
+                        <a onClick={this.amend.bind(t,record["member_id"])}>修改</a>
                     </span>
         ),
         }];
@@ -282,15 +384,15 @@ class ShopGrade extends React.Component {
             onChange: t.onChange
         }
         return (
-            <div className="shop_grade">
+            <div className="shop_member">
                 <Breadcrumb className="bread_style">
-                    <Breadcrumb.Item><a href="">店铺</a></Breadcrumb.Item>
-                    <Breadcrumb.Item>店铺分类</Breadcrumb.Item>
+                    <Breadcrumb.Item><a href="">会员</a></Breadcrumb.Item>
+                    <Breadcrumb.Item>会员管理</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="table-operations">
                     <Button type="dashed" onClick={t.add} icon="plus">添加</Button>
                 </div>
-                <Table className="table_width" pagination={coo} rowSelection={rowSelection}  columns={columns} dataSource={t.state.list}/>
+                <Table className="table_width" pagination={coo} rowSelection={rowSelection}  columns={columns} dataSource={t.state.list} scroll={{ x: 2300 }}/>
                 {t.shopForm1()}
                 {t.shopForm2()}
         </div>
@@ -299,5 +401,5 @@ class ShopGrade extends React.Component {
 }
 
 // ES6 mixin写法，通过mixin将store的与组件连接，功能是监听store带来的state变化并刷新到this.state
-ReactMixin.onClass(ShopGrade, Reflux.connect(Store));
-module.exports = ShopGrade;
+ReactMixin.onClass(ShopMember, Reflux.connect(Store));
+module.exports = ShopMember;

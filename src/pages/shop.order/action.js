@@ -6,7 +6,7 @@ import Reflux from 'reflux';
 var Actions = Reflux.createActions([
     "getList",
     "show",
-    "addShopMember",
+    "addShopGrade",
     "cancel",
     "getEditorList",
     "editorOk"

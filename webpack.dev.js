@@ -31,12 +31,6 @@ module.exports = {
             { test: /\.less$/, loader: ExtractTextPlugin.extract('style','css!less!postcss')},
             { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=1000&name=images/[name].[ext]' }
 
-        ],
-        postLoaders: [
-            {
-                test: /\.js$/,
-                loaders: ['es3ify-loader']
-            }
         ]
     },
     //热启动配置
@@ -45,10 +39,6 @@ module.exports = {
        historyApiFallback: true,//不跳转
        inline: true,//实时刷新
        hot: true,
-       overlay: {
-          warnings: true,
-          errors: true
-        }
     },
     postcss: [
         autoprefixer({
@@ -66,17 +56,10 @@ module.exports = {
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
-                properties: false,
                 warnings: false
             },
-            output: {
-                beautify: true,
-                quote_keys: true
-            },
-            mangle: {
-                screw_ie8: false
-            },
-            sourceMap: false
+            // 排除关键字，不能混淆
+            except:['$','exports','require']
         }),
         new webpack.DefinePlugin({
             'process.env': {

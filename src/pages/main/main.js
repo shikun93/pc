@@ -36,11 +36,20 @@ const allUrl = {
     "url55":"/main/adminLog",
     "url61":"/main/shopGrade",
     "url62":"/main/shopClass",
-    "url63":"/main/ownStore"
+    "url63":"/main/ownStore",
+    "url65":"/main/shopMember",
+    "url67":"/main/shopOrder",
 };
 
 const cb =function(err){
     message.error(err);
+}
+window.addKeyFun = function(arr){
+    arr = arr.map(function(item,index){
+         item.key = index+1;
+         return item;
+    })
+    return arr;
 }
 
 //信息修改
