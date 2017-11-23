@@ -17,7 +17,8 @@ var Store =  Reflux.createStore({
         total:1,
         visible:false,
         editorList:{},
-        editorVisible:false
+        editorVisible:false,
+       
     },
     onGetList:function(token,page,cb){
         let t = this;
@@ -37,7 +38,15 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
                 if(result.error ==""){
-                    t.data.list = addKeyFun(result.data.member_list);
+                    let data = result.data.member_list;
+                    data = data.map(function(item,index){
+                        item.member_name = {
+                            member_name:item.member_name,
+                            member_avatar:item.member_avatar
+                        };
+                        return item;
+                    });
+                    t.data.list = addKeyFun(data);
                     t.data.total = result.ext["total_num"];
                     t.data.current = page;
                     t.updateComponent();
@@ -59,7 +68,7 @@ var Store =  Reflux.createStore({
     onAddShopMember:function(token,values,Actions,cb){
         let t = this;
         let length = values.member_avatar.length-1;
-        values.member_avatar = values.member_avatar?values.member_avatar[length].response.data.file:'';
+        values.member_avatar = values.member_avatar?values.member_avatar[length].response.data.url:'';
         values.admin_token = token;
         delete values.member_id;
         let obj = qs.stringify(values);
@@ -96,11 +105,17 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error == ""){
                     let data = result.data;
-                    data.member_avatar = {
-                        uid: 1,
-                        status: 'done',
-                        url: data.member_avatar
-                    };
+                    if(data.member_avatar){
+                        data.member_avatar = {
+                            uid: 1,
+                            status: 'done',
+                            url: data.member_avatar
+                        };
+                    }
+                   
+                    data.inform_allow = data.inform_allow!=0?true:false;
+                    data.is_allowtalk = data.is_allowtalk!=0?true:false;
+                    data.is_buy = data.is_buy!=0?true:false;
                     t.data.editorVisible = true;
                     t.data.editorList = data;
                     t.updateComponent();
@@ -115,11 +130,14 @@ var Store =  Reflux.createStore({
     onEditorOk:function(token,values,Actions,cb){
         let t = this;
         let length = values.member_avatar.length-1;
-        values.member_avatar = values.member_avatar?(values.member_avatar.url||values.member_avatar[length].response.data.file):'';
+        values.member_avatar = values.member_avatar?(values.member_avatar.url||values.member_avatar[length].response.data.url):'';
         values.admin_token = token;
+        values.inform_allow = values.inform_allow?1:0;
+        values.is_allowtalk = values.is_allowtalk?1:0;
+        values.is_buy = values.is_buy?1:0;
         values.update = 1;
         let obj = qs.stringify(values);
-        fetch(urlhttp+"/admin.shop_store_grade/editone",{method:"post",body:obj,headers:{
+        fetch(urlhttp+"/admin.shop_member/editmember",{method:"post",body:obj,headers:{
             "Content-Type":"application/x-www-form-urlencoded"
         }})
             .then(function(response){

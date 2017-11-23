@@ -9,7 +9,7 @@ var Actions = Reflux.createActions([
     "addShopMember",
     "cancel",
     "getEditorList",
-    "editorOk"
+    "editorOk",
 ]);
 
 module.exports = Actions;

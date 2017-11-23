@@ -5,11 +5,9 @@ import Reflux from 'reflux';
 
 var Actions = Reflux.createActions([
     "getList",
-    "show",
-    "addShopGrade",
-    "cancel",
-    "getEditorList",
-    "editorOk"
+    "cancelOrder",
+    "findLook",
+    "cancel"
 ]);
 
 module.exports = Actions;

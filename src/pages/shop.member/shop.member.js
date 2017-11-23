@@ -5,10 +5,11 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Breadcrumb,message,Button,Table,Form,Input,Radio,Modal,Upload} from 'antd';
+import { Breadcrumb,message,Button,Table,Form,Input,Radio,Modal,Upload,Switch} from 'antd';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 import './shop.member.less';
+import qs from 'qs';
 
 const formItemLayout = {
     labelCol: {
@@ -41,7 +42,7 @@ class ShopMemberForm extends React.Component {
 
     normFile = (e) => {
        if(e.file.response){
-        this.setState({imgValue1:e.file.response.data.file});
+        this.setState({imgValue1:e.file.response.data.url});
        }
        
         if (Array.isArray(e)) {
@@ -50,13 +51,38 @@ class ShopMemberForm extends React.Component {
         return e && e.fileList;
     }
 
+    validatorMember(rule, value, callback){
+        let token = sessionStorage.getItem("admin_token");
+        let obj = {
+            admin_token:token,
+        }
+        obj[rule.field] = value;
+        obj = qs.stringify(obj);
+        fetch(urlhttp+"/admin.shop_member/MemberCheck",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
+            .then(function(response){
+                return response.json();
+            }).then(function(result){
+                if(result.error ==""){}
+                else if(result.error ==="请登陆"){
+                   hashHistory.push('/');
+                }else{
+                    callback(result.error);       
+                }
+                callback();
+        }).catch(function(error){
+            //console.log(error);
+        });
+    }
 
     render() {
 
         let t = this;
-        console.log();
+        
         let token = sessionStorage.getItem("admin_token");
         const { getFieldDecorator } = this.props.form;
+       
         return (
             <Modal
             visible={true}
@@ -87,6 +113,8 @@ class ShopMemberForm extends React.Component {
                 initialValue: t.props.typePopPu == "edit"?t.props.formdata["member_name"]:"",
                 rules: [ {
                     required: true, message: 'Please input your member_name!',
+                },{
+                     validator:t.validatorMember
                 }],
             })(
                 <Input />
@@ -118,7 +146,20 @@ class ShopMemberForm extends React.Component {
                     required: true, message: 'Please input your member_email!',
                 },{
                     type: 'email', message: 'The input is not valid E-mail!',
+                },{
+                     validator:t.validatorMember
                 }],
+            })(
+                <Input />
+            )}
+            </FormItem>
+            <FormItem
+                {...formItemLayout}
+                label="手机号码"
+                hasFeedback
+            >
+            {getFieldDecorator('member_mobile', {
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata["member_mobile"]:"",
             })(
                 <Input />
             )}
@@ -172,6 +213,7 @@ class ShopMemberForm extends React.Component {
             <FormItem
                 {...formItemLayout}
                 label="头像"
+                extra="默认会员头像图片请使用100*100像素jpg/gif/png格式的图片。"
             >
              {getFieldDecorator('member_avatar', {
                     valuePropName: 'fileList',
@@ -179,9 +221,9 @@ class ShopMemberForm extends React.Component {
                     initialValue:t.props.typePopPu == "edit"?t.props.formdata["member_avatar"]:"",
                 })(
                   <Upload
-                    action={urlhttp+"/admin.shop_setting/uploadimage"}
-                    data={{admin_token:token,file_name:"default_goods_image"}}
-                    name="img"
+                    action={urlhttp+"/admin.shop_member/uploadimage"}
+                    data={{admin_token:token}}
+                    name="imgFile"
                     showUploadList={false}
                     >
                     <div>
@@ -190,6 +232,71 @@ class ShopMemberForm extends React.Component {
                 </Upload>
             )}
             </FormItem>
+            {
+                t.props.typePopPu == "edit"?<div>
+                    <FormItem
+                    {...formItemLayout}
+                    label="允许举报"
+                    extra="如果禁止该项则会员不能在商品详情页面进行举报"
+                    >
+                    {getFieldDecorator('inform_allow', {
+                        valuePropName: 'checked',
+                        initialValue:t.props.formdata["inform_allow"]?true:false,   
+                    })(
+                       <Switch  checkedChildren="开启" unCheckedChildren="关闭"/>
+                    )}
+                    </FormItem>
+                    <FormItem
+                    {...formItemLayout}
+                    label="允许发表言论"
+                    extra="如果禁止该项则会员不能在前台进行下单操作"
+                    >
+                    {getFieldDecorator('is_allowtalk', {
+                        valuePropName: 'checked',
+                        initialValue:t.props.formdata["is_allowtalk"]?true:false,   
+                    })(
+                       <Switch  checkedChildren="开启" unCheckedChildren="关闭"/>
+                    )}
+                    </FormItem>
+                    <FormItem
+                    {...formItemLayout}
+                    label="否有购买权限"
+                    extra="如果禁止该项则会员不能发表咨询和发送站内信"
+                    >
+                    {getFieldDecorator('is_buy', {
+                        valuePropName: 'checked',
+                        initialValue:t.props.formdata["is_buy"]?true:false,   
+                    })(
+                       <Switch  checkedChildren="开启" unCheckedChildren="关闭"/>
+                    )}
+                    </FormItem>
+                    <FormItem
+                    {...formItemLayout}
+                    label="积分"
+                    >
+                    <p>{t.props.formdata.member_points}</p>
+                    </FormItem>
+                    <FormItem
+                    {...formItemLayout}
+                    label="经验值"
+                    >
+                   <p>{t.props.formdata.member_exppoints}</p>
+                    </FormItem>
+                    <FormItem
+                    {...formItemLayout}
+                    label="可用预存款"
+                    >
+                    <p>{t.props.formdata.available_predeposit}</p>
+                    </FormItem>
+                    <FormItem
+                    {...formItemLayout}
+                    label="冻结预存款"
+                    >
+                    <p>{t.props.formdata.freeze_predeposit}</p>
+                    </FormItem>
+                </div>
+                :''
+            }
         </Form>
         </Modal>
     );
@@ -230,7 +337,7 @@ class ShopMember extends React.Component {
     }
 
     onChange(page){
-        console.log(page);
+        
         Actions.getList(token,page,cb);
     }
 
@@ -260,16 +367,17 @@ class ShopMember extends React.Component {
 
     shopForm1(){
         let t = this;
-        return t.state.visible?<ShopMembersForm cancel={t.handleCancel} ok={t.handleOk}/>:"";
+        return t.state.visible?<ShopMembersForm cancel={t.handleCancel} ok={t.handleOk} memberCheck={t.memberCheck} error={t.state.error}/>:"";
     }
 
     shopForm2(){
         let t = this;
-        return t.state.editorVisible?<ShopMembersForm cancel={t.handleCancel} ok={t.editorOk} typePopPu="edit" formdata={t.state.editorList}/>:"";
+        return t.state.editorVisible?<ShopMembersForm cancel={t.handleCancel} ok={t.editorOk} typePopPu="edit" formdata={t.state.editorList} memberCheck={t.memberCheck} error={t.state.error}/>:"";
     }
     
     render() {
         let t = this;
+        
         const columns = [{
                 title: '会员ID',
                 dataIndex: 'member_id',
@@ -279,7 +387,8 @@ class ShopMember extends React.Component {
                 title: '会员名称',
                 dataIndex: 'member_name',
                 fixed: 'left',
-                width:100
+                width:130,
+                render: text => <p><img src={text.member_avatar} width="25" height="25" style={{"borderRadius":"50%","marginRight":"5px"}}/>{text.member_name}</p>
             },{
                 title: '会员邮箱',
                 dataIndex: 'member_email',

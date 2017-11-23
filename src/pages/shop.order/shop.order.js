@@ -6,6 +6,7 @@ import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
 import { Breadcrumb,message,Button,Table,Modal} from 'antd';
+import OrderDetails from '../../components/order.details/order.details';
 import './shop.order.less';
 
 
@@ -30,17 +31,31 @@ class ShopOrder extends React.Component {
         Actions.getList(token,1,cb);
     }  
 
-    add(){
-        Actions.show();
-    }
-
-    remove(){
-
+    findLook(id){
+        let token = sessionStorage.getItem("admin_token");
+        Actions.findLook(token,id,cb);
     } 
 
-    amend(id){
+    cancelOrder(id){
         let token = sessionStorage.getItem("admin_token");
-        Actions.getEditorList(token,id,cb);
+        Actions.cancelOrder(token,id,Actions,cb);
+    }
+
+    cancel(){
+        Actions.cancel();
+    }
+
+    allDetails(){
+        let t = this;
+        return <Modal
+            visible={t.state.visible}
+            title="商品订单"
+            width="1000px"
+            onCancel={this.cancel}
+            footer={null}
+            >
+            <OrderDetails allDetails={t.state.findList}/>
+        </Modal>
     }
 
     onChange(page){
@@ -50,6 +65,9 @@ class ShopOrder extends React.Component {
     render() {
         let t = this;
         const columns = [{
+                dataIndex: 'order_id',
+                render: text => <span style={{"display":"none"}}>{text}</span>,
+            },{
                 title: '订单编号',
                 dataIndex: 'order_sn',
                 width:70,
@@ -125,14 +143,18 @@ class ShopOrder extends React.Component {
                 width:80
             },{
                 title: '操作',
-                    width:80,
+                    width:150,
                     key: 'action',
                     fixed: 'right', 
-                    render: (text, record) => (
-                    <span>
-                        <a onClick={this.amend.bind(t,record["member_id"])}>修改</a>
-                    </span>
-        ),
+                    render: (text, record) => {
+                        return record["order_state"]=="已取消"?<span>
+                        <a onClick={this.findLook.bind(t,record["order_id"])}>查看</a>
+                    </span>:<span>
+                        <a onClick={this.findLook.bind(t,record["order_id"])}>查看</a>
+                        <span className="ant-divider" />
+                        <a onClick={this.cancelOrder.bind(t,record["order_id"])}>取消订单</a>
+                    </span>;
+                    }
         }];
         const rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
@@ -163,7 +185,8 @@ class ShopOrder extends React.Component {
                 <div className="table-operations">
                     <Button type="dashed" onClick={t.add} icon="plus">添加</Button>
                 </div>
-                <Table className="table_width" pagination={coo} rowSelection={rowSelection}  columns={columns} dataSource={t.state.list} scroll={{ x: 2140 }}/>
+                <Table className="table_width" pagination={coo} rowSelection={rowSelection}  columns={columns} dataSource={t.state.list} scroll={{ x: 2200 }}/>
+                {t.allDetails()}
         </div>
     );
     }
