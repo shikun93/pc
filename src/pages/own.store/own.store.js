@@ -57,13 +57,13 @@ class OwnStoreForm extends React.Component {
             </FormItem>
             <FormItem
                 {...formItemLayout}
-                label="等级名称"
+                label="店铺名称"
                 hasFeedback
             >
-            {getFieldDecorator('store_grade_name', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["store_grade_name"]:"",
+            {getFieldDecorator('store_name', {
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata["store_name"]:"",
                 rules: [ {
-                    required: true, message: 'Please input your store_grade_name!',
+                    required: true, message: 'Please input your store_name!',
                 }],
             })(
                 <Input />
@@ -71,80 +71,30 @@ class OwnStoreForm extends React.Component {
             </FormItem>
             <FormItem
                 {...formItemLayout}
-                label="可发布商品数"
+                label="管理员账号"
                 hasFeedback
-                extra="0表示没有限制"
             >
-            {getFieldDecorator('store_grade_goods_limit', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata.store_grade_goods_limit:"0",
+            {getFieldDecorator('member_name', {
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata.member_name:"",
+                rules: [ {
+                    required: true, message: 'Please input your member_name!',
+                }],
             })(
-                <Input type="number"/>
+                <Input />
             )}
-            </FormItem>
-            <FormItem
-            {...formItemLayout}
-            label="可上传图片数"
-            extra="0表示没有限制"
-            hasFeedback >
-            {getFieldDecorator('store_grade_album_limit', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["store_grade_album_limit"]:"0",
-            })(
-                <Input type="number" />
-            )}
-            </FormItem>
-            <FormItem
-            {...formItemLayout}
-            label="可选模板套数"
-            hasFeedback >
-                <p>0 (在店铺等级列表设置)</p>
-            </FormItem>
-            <FormItem
-            {...formItemLayout}
-            label="可用附加功能"
-            >
-                {getFieldDecorator('store_grade_function', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["store_grade_function"]:false,
-                })(
-                    <Checkbox>编辑器多媒体功能</Checkbox>
-                )} 
-            </FormItem>
+            </FormItem>  
             <FormItem
                 {...formItemLayout}
-                label="收费标准"
+                label="管理员密码"
                 hasFeedback
-                extra="收费标准，单：元/年，必须为数字，在会员开通或升级店铺时将显示在前台"
             >
-            {getFieldDecorator('store_grade_price', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["store_grade_price"]:"",
+            {getFieldDecorator('member_password', {
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata["member_password"]:"",
                  rules: [ {
                     required: true, message: 'Please input your store_grade_price!',
                 }],
             })(
-                <Input type="number"/>
-            )}
-            </FormItem>
-            <FormItem
-                {...formItemLayout}
-                label="申请说明"
-                hasFeedback
-                extra="申请说明，在会员开通或升级店铺时将显示在前台"
-            >
-            {getFieldDecorator('store_grade_description', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["store_grade_description"]:"",
-            })(
-                <Input type="textarea" rows={4}/>
-            )}
-            </FormItem>
-            <FormItem
-                {...formItemLayout}
-                label="级别"
-                hasFeedback
-                extra="数值越大表明级别越高"
-            >
-            {getFieldDecorator('sort_order', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["sort_order"]:"",
-            })(
-                <Input type="number"/>
+                <Input />
             )}
             </FormItem>
         </Form>
@@ -183,7 +133,7 @@ class OwnStore extends React.Component {
 
     amend(id){
         let token = sessionStorage.getItem("admin_token");
-        Actions.getEditorList(token,id,cb);
+        //Actions.getEditorList(token,id,cb);
     }
 
     onChange(page){
@@ -200,7 +150,7 @@ class OwnStore extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addShopGrade(obj,values,Actions,cb);
+                Actions.addOwnStore(obj,values,Actions,cb);
             }
         });
     }
@@ -210,7 +160,7 @@ class OwnStore extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorOk(obj,values,Actions,cb);
+                //Actions.editorOk(obj,values,Actions,cb);
             }
         });
     }

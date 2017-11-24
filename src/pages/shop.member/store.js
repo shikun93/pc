@@ -90,7 +90,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onGetEditorList:function(token,id,cd){
+    onGetEditorList:function(token,id,cb){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,

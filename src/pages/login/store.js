@@ -36,7 +36,7 @@ var Store =  Reflux.createStore({
             admin_name:t.data.username,
             admin_password:t.data.password
         });
-        fetch("/admin.login/login",{method:"post",body:obj,
+        fetch(urlhttps+"/admin.login/login",{method:"post",body:obj,
             headers:{
                 "Content-Type":"application/x-www-form-urlencoded"
             }
@@ -55,24 +55,6 @@ var Store =  Reflux.createStore({
         }).catch(function(error){
             console.log(error);
         });
-        // $.ajax({
-        //     url:"/admin.login/login",
-        //     type:"post",
-        //     data:data,
-        //     success:function(result){
-        //         console.log(result);
-        //         if(result.error==""){
-        //             sessionStorage.setItem("admin_token",result.data.admin_token);
-        //             hashHistory.push("/main/table");
-        //             t.updateComponent();
-        //         }else{
-        //             cb(result.error);
-        //         }
-        //     },
-        //     error:function(error){
-        //         console.log(error);
-        //     }
-        // });
     }
 });
 module.exports = Store;

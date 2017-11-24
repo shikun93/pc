@@ -50,19 +50,15 @@ var Store =  Reflux.createStore({
         t.data.visible = true;
         t.updateComponent();
     },
-    onAddShopGrade:function(token,values,Actions,cb){
+    onAddOwnStore:function(token,values,Actions,cb){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
-            store_grade_name:values.store_grade_name,
-            store_grade_goods_limit:values.store_grade_goods_limit,
-            store_grade_album_limit:values.store_grade_album_limit,
-            store_grade_function:'',
-            store_grade_price:values.store_grade_price,
-            store_grade_description:values.store_grade_description,
-            sort_order:values.sort_order
+            store_name:values.store_name,
+            member_name:values.member_name,
+            member_password:values.member_password
         });
-        fetch(urlhttp+"/admin.shop_store_grade/addone",{method:"post",body:obj,headers:{
+        fetch(urlhttp+"/admin.own_store/addone",{method:"post",body:obj,headers:{
             "Content-Type":"application/x-www-form-urlencoded"
         }})
             .then(function(response){
@@ -80,7 +76,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onGetEditorList:function(token,id,cd){
+    onGetEditorList:function(token,id,cb){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
