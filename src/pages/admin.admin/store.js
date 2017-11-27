@@ -17,7 +17,7 @@ var Store =  Reflux.createStore({
         visible:false,
         editorOne:{}
     },
-    onGetGroups:function(token,cb){
+    onGetGroups:function(token){
         let t = this;
         let arr = [];
         let obj = qs.stringify({
@@ -43,7 +43,7 @@ var Store =  Reflux.createStore({
         t.data.addVisible = true;
         t.updateComponent();
     },
-   onGetAdminAdminList:function(token,page,cb){
+   onGetAdminAdminList:function(token,page){
        let t = this;
        
        let obj = qs.stringify({
@@ -58,7 +58,7 @@ var Store =  Reflux.createStore({
                return response.json();
            }).then(function(result){
             if(result.error==""){
-                t.data.list = result.data["admin_list"];
+                t.data.list = addKeyFun(result.data["admin_list"]);
                 t.data.total = result.ext["total_num"];
                 t.data.current = page;
                 t.updateComponent();
@@ -70,7 +70,7 @@ var Store =  Reflux.createStore({
            
        });
    },
-    onAddAdmin:function(token,values,Actions,cb){
+    onAddAdmin:function(token,values,Actions){
         let t = this;
        
         let obj = qs.stringify({
@@ -91,7 +91,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error==""){
                     t.data.addVisible = false;
-                    Actions.getAdminAdminList(token,1,cb);
+                    Actions.getAdminAdminList(token,1);
                     t.updateComponent();
                 }else{
                     cb(result.error);
@@ -99,7 +99,7 @@ var Store =  Reflux.createStore({
             
         });
     },
-    onGetEditorAdmin:function(token,id,message){
+    onGetEditorAdmin:function(token,id){
         let t = this;
        
         let obj = qs.stringify({
@@ -114,7 +114,7 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
             if(result.error="不能编辑系统管理员"&&result.data.length ==0){
-                message.error('不能编辑系统管理员');
+                cb('不能编辑系统管理员');
             }else{
                 t.data.editorOne = result.data["admin_info"];
                 t.data.visible = true;
@@ -122,7 +122,7 @@ var Store =  Reflux.createStore({
             }
         });
     },
-    onEditorSuccess:function(token,values,Actions,page,cb){
+    onEditorSuccess:function(token,values,Actions,page){
         let t = this;
         
         let obj= qs.stringify({
@@ -146,7 +146,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error==""){
                     t.data.visible = false;
-                    Actions.getAdminAdminList(token,page,cb);
+                    Actions.getAdminAdminList(token,page);
                     t.updateComponent();
                 }else{
                     cb(result.error);

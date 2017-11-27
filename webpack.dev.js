@@ -19,7 +19,7 @@ module.exports = {
         publicPath: "./",
         filename: '[name].min.js'
     },
-    devtool: "#source-map", //"eval-source-map",
+    devtool: "#cheap-module-eval-source-map", //"eval-source-map",
     module: {
         loaders: [
             {

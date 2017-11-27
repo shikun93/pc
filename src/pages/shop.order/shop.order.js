@@ -182,9 +182,6 @@ class ShopOrder extends React.Component {
                     <Breadcrumb.Item><a href="">交易</a></Breadcrumb.Item>
                     <Breadcrumb.Item>商品订单</Breadcrumb.Item>
                 </Breadcrumb>
-                <div className="table-operations">
-                    <Button type="dashed" onClick={t.add} icon="plus">添加</Button>
-                </div>
                 <Table className="table_width" pagination={coo} rowSelection={rowSelection}  columns={columns} dataSource={t.state.list} scroll={{ x: 2200 }}/>
                 {t.allDetails()}
         </div>

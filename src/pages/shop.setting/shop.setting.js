@@ -8,14 +8,9 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Breadcrumb,Icon,Button, Form, Input,message,Upload,Modal } from 'antd';
+import { Breadcrumb,Icon,Button, Form, Input,Upload,Modal } from 'antd';
 const FormItem = Form.Item;
 import './shop.setting.less';
-
-const cb =function(err){
-    message.error(err);
-}
-
 
 //修改/添加公用表单
 class ShopSettingForm extends React.Component {
@@ -232,14 +227,14 @@ class ShopSetting extends React.Component {
     componentDidMount(){
         let t = this;
         let token = sessionStorage.getItem("admin_token");
-        Actions.setting(token,cb);
+        Actions.setting(token);
     }
 
     submitSetting(){
         let token = sessionStorage.getItem("admin_token");
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                Actions.setting(token,cb,values,Actions,Modal);
+                Actions.setting(token,values,Actions,Modal);
             }
         });
     }

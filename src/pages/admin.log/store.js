@@ -16,7 +16,7 @@ var Store =  Reflux.createStore({
         total:10,
         values:{}
     },
-    onGetAdminLog:function(token,values,page,cb){
+    onGetAdminLog:function(token,values,page){
         let t = this;
         let arr = [];
         
@@ -37,7 +37,7 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
                 if(result.error==""){
-                    t.data.list = result.data["log_list"];
+                    t.data.list = addKeyFun(result.data["log_list"]);
                     t.data.total = result.ext["total_num"];
                     t.data.current = page;
                     t.data.values = values;

@@ -8,15 +8,11 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Breadcrumb,Button,Form,Input,message,Tabs,Modal,Switch} from 'antd';
+import { Breadcrumb,Button,Form,Input,Tabs,Modal,Switch} from 'antd';
 import './site.setup.less';
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
-
-const cb =function(err){
-    message.error(err);
-}
 
 class SiteSetupForm extends React.Component {
     state = {
@@ -71,7 +67,7 @@ class SiteSetupForm extends React.Component {
                     extra="可暂时将站点关闭，其他人无法访问，但不影响管理员访问后台">
                     {getFieldDecorator('site_status', {
                         valuePropName: 'checked',
-                        initialValue:t.props.formData.site_status?t.props.formData.site_status.value:false,
+                        initialValue:t.props.formData.site_status?Boolean(t.props.formData.site_status.value):false,
                     })(
                    <Switch  checkedChildren="开启" unCheckedChildren="关闭"/>
                 )}
@@ -111,14 +107,14 @@ class SiteSetup extends React.Component {
     componentDidMount(){
         let t = this;
         let token = sessionStorage.getItem("admin_token");
-        Actions.siteSetting(token,cb);
+        Actions.siteSetting(token);
     }
 
     settingEmail(){
         let token = sessionStorage.getItem("admin_token");
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                Actions.siteSetting(token,cb,values,Actions,Modal);
+                Actions.siteSetting(token,values,Actions,Modal);
             }
         });
     }

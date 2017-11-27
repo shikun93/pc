@@ -44,7 +44,7 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
                 if(result.error ==""){
-                    t.data.list = result.data["goods_type_list"];
+                    t.data.list = addKeyFun(result.data["goods_type_list"]);
                     t.data.total = result.ext["total_num"];
                     t.data.current = page;
                     t.updateComponent();

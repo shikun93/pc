@@ -20,7 +20,7 @@ var Store =  Reflux.createStore({
         site_phone:''
       }
     },
-    onSetting:function(token,cb,values,Actions,Modal){
+    onSetting:function(token,values,Actions,Modal){
         let t = this;
         let obj = {
             admin_token:token,
@@ -43,7 +43,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error ==""){
                     if(result.data ==1){
-                        Actions.setting(token,cb);
+                        Actions.setting(token);
                         const modal = Modal.success({
                             title: '保存成功',
                             content: '页面1s后自动关闭',

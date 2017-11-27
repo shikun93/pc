@@ -44,15 +44,14 @@ class AdminImport extends React.Component {
                 <Breadcrumb.Item>查询结果导入</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="main">
-                <p>易打单优惠券文件上传</p>
-                 <Upload {...props}>
-                    <Button className="">
-                      <Icon type="upload" /> 上传文件
-                    </Button>
-                </Upload>
-                </div>
-               
-    </div>
+                    <p>易打单优惠券文件上传</p>
+                     <Upload {...props}>
+                        <Button className="">
+                          <Icon type="upload" /> 上传文件
+                        </Button>
+                    </Upload>
+                </div>        
+            </div>
     );
     }
 }

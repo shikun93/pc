@@ -7,8 +7,7 @@ import ReactMixin from 'react-mixin';
 import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
-import { Tabs, Menu, Icon,Row, Col,Dropdown,Form,Modal,Input,Button,message} from 'antd';
-const TabPane = Tabs.TabPane;
+import { Menu,Dropdown,Form,Modal,Input,Button,message} from 'antd';
 const SubMenu = Menu.SubMenu;
 const FormItem = Form.Item;
 import './main.less';
@@ -41,7 +40,7 @@ const allUrl = {
     "url67":"/main/shopOrder",
 };
 
-const cb =function(err){
+window.cb =function(err){
     message.error(err);
 }
 window.addKeyFun = function(arr){
@@ -122,7 +121,7 @@ class MessageForm extends React.Component {
         <FormItem>
         <Button key="back" size="large" onClick={this.props.cancel}>取消</Button>,
     <Button key="submit" type="primary" size="large"  onClick={this.props.ok.bind(this)}>
-        确认
+            <span style={{color:"#fff"}}>确认</span>
         </Button>
         </FormItem>
         </Form>
@@ -197,7 +196,7 @@ class PasswordForm extends React.Component {
         <FormItem>
         <Button key="back" size="large" onClick={this.props.cancel}>取消</Button>,
     <Button key="submit" type="primary" size="large"  onClick={this.props.ok.bind(this)}>
-        确认
+            <span style={{color:"#fff"}}>确认</span>
         </Button>
         </FormItem>
         </Form>
@@ -207,7 +206,7 @@ class PasswordForm extends React.Component {
 const AdminPasswordForm = Form.create()(PasswordForm);
 
 //组件类
-class Sider extends React.Component {
+class Main extends React.Component {
 
     constructor(props) {
         super(props);
@@ -235,7 +234,7 @@ class Sider extends React.Component {
     handleClick(e){
         sessionStorage.setItem("current",e.key);
         this.setState({
-        current: e.key,
+            current: e.key,
         })
     }
 
@@ -306,7 +305,7 @@ class Sider extends React.Component {
                     }
                });
             }
-       t.setState({arr:arr});
+        Actions.setList(arr);
     }
 
     addOk(){
@@ -338,6 +337,7 @@ class Sider extends React.Component {
             let t = this;
             return t.state.messageVisable?<div>
             <Modal visible={true}
+            title="修改信息"
             closable ={false}
             footer={null}>
                 <AdminMessageForm messageList={t.state.messageList} ok={this.addHandleOk} cancel={this.handleCancel}/>
@@ -353,6 +353,7 @@ class Sider extends React.Component {
         let t = this;
         return t.state.passVisable?<div>
         <Modal visible={true}
+        title="修改密码"
         closable ={false}
         footer={null}>
             <AdminPasswordForm ok={this.addOk} passChange={t.passChange} pattern ={t.state.pattern} cancel={this.handleCancel} adminGroupList = {t.state.adminGroupList}/>
@@ -393,7 +394,7 @@ class Sider extends React.Component {
                         <ul>
                             {
                                 t.state.menuList?t.state.menuList.map(function(item,index){
-                                return <li onClick={t.menuChangeList.bind(t,index,item["admin_menu_id"])}>{item["admin_menu_name"]}</li>
+                                return <li key={index} onClick={t.menuChangeList.bind(t,index,item["admin_menu_id"])}>{item["admin_menu_name"]}</li>
                                 }):""
                             }
                         </ul>
@@ -422,5 +423,5 @@ class Sider extends React.Component {
 }
 
 // ES6 mixin写法，通过mixin将store的与组件连接，功能是监听store带来的state变化并刷新到this.state
-ReactMixin.onClass(Sider, Reflux.connect(Store));
-module.exports = Sider;
+ReactMixin.onClass(Main, Reflux.connect(Store));
+module.exports = Main;

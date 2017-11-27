@@ -8,7 +8,6 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Breadcrumb} from 'antd';
 import './home.less';
 
 const cb =function(err){
@@ -22,9 +21,6 @@ class Home extends React.Component {
         this.state = {
             
         };
-    }
-    componentWillMount(){
-      
     }
     componentDidMount(){
         let t = this;

@@ -7,29 +7,11 @@ import ReactMixin from 'react-mixin';
 import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
-import { Table,Breadcrumb,Icon,Modal,Button, Form, Input, Tooltip,Select,message } from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button, Form, Input,Select } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-const cb =function(err){
-    message.error(err);
-}
-
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-    },
-};
-
 import './admin.admin.less';
-
-
-
 
 //修改/添加公用表单
 class AdminForm extends React.Component {
@@ -37,10 +19,9 @@ class AdminForm extends React.Component {
         confirmDirty: false,
     };
 
-
     render() {
-
         let t = this;
+
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -69,7 +50,7 @@ class AdminForm extends React.Component {
                     {getFieldDecorator('admin_name', {
                         initialValue: t.props.typePopPu == "edit"?t.props.formdata["admin_name"]:"",
                         rules: [ {
-                            required: true, message: 'Please input your admin_name!',
+                            required: true, message: '请填写管理员名称!',
                         }],
                     })(
                     <Input />
@@ -82,7 +63,7 @@ class AdminForm extends React.Component {
                     {getFieldDecorator('admin_password', {
                         initialValue: t.props.typePopPu == "edit"?t.props.formdata["admin_password"]:"",
                         rules: [ {
-                            required: true, message: 'Please input your admin_password!',
+                            required: true, message: '请填写管理员密码!',
                         }],
                     })(
                     <Input type="password"/>
@@ -93,12 +74,12 @@ class AdminForm extends React.Component {
                     label="管理组ID">
                         {getFieldDecorator('admin_group_id', {
                             initialValue: t.props.typePopPu == "edit"?t.props.formdata["admin_group_id"]:"",
-                            rules: [{ required: true, message: 'Please select your admin_group_id!' }],
+                            rules: [{ required: true, message: '请填写管理组ID!' }],
                         })(
                         <Select>
                             {
                                 t.props.adminGroupList.map(function(item,index){
-                                return <Option value={item["admin_group_id"]}>{item["admin_group_name"]}</Option>;
+                                return <Option key={index} value={item["admin_group_id"]}>{item["admin_group_name"]}</Option>;
                                 })
                             }
                         </Select>
@@ -111,9 +92,9 @@ class AdminForm extends React.Component {
                     {getFieldDecorator('email', {
                         initialValue: t.props.typePopPu == "edit"?t.props.formdata["email"]:"",
                         rules: [{
-                            type: 'email', message: 'The input is not valid E-mail!',
+                            type: 'email', message: '这不是电子邮件',
                         },{
-                            required: true, message: 'Please confirm your E-mail!',
+                            required: true, message: '请填写电子邮件',
                         }],
                     })(
                     <Input/>
@@ -126,7 +107,7 @@ class AdminForm extends React.Component {
                     {getFieldDecorator('mobile', {
                         initialValue: t.props.typePopPu == "edit"?t.props.formdata["mobile"]:"",
                         rules: [{
-                            required: true, message: 'Please confirm your mobile!',
+                            required: true, message: '请填写手机号码!',
                         }],
                     })(
                     <Input />
@@ -139,7 +120,7 @@ class AdminForm extends React.Component {
                     {getFieldDecorator('real_name', {
                         initialValue: t.props.typePopPu == "edit"?t.props.formdata["real_name"]:"",
                             rules: [{
-                            required: true, message: 'Please confirm your real_name!',
+                            required: true, message: '请填写真实姓名!',
                         }],
                     })(
                     <Input />
@@ -152,7 +133,7 @@ class AdminForm extends React.Component {
             {getFieldDecorator('sort_order', {
                 initialValue: t.props.typePopPu == "edit"?t.props.formdata["sort_order"]:"",
                 rules: [{
-                    required: true, message: 'Please confirm your sort_order!',
+                    required: true, message: '请填写排序!',
                 }],
             })(
             <Input type="number" />
@@ -161,7 +142,7 @@ class AdminForm extends React.Component {
         <FormItem>
             <Button key="back" size="large" onClick={this.props.cancel}>取消</Button>,
             <Button key="submit" type="primary" size="large"  onClick={this.props.ok.bind(this)}>
-                确认
+                <span style={{color:"#fff"}}>确认</span>
             </Button>
         </FormItem>
         </Form>
@@ -169,7 +150,7 @@ class AdminForm extends React.Component {
     }
 }
 
-const AdminGroupForm = Form.create()(AdminForm);
+const AdminsForm = Form.create()(AdminForm);
 
 
 //组件类
@@ -189,8 +170,8 @@ class AdminAdmin extends React.Component {
     componentDidMount(){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getAdminAdminList(obj,1,cb);
-        Actions.getGroups(obj,cb);
+        Actions.getAdminAdminList(obj,1);
+        Actions.getGroups(obj);
     }
     //取消
     handleCancel(){
@@ -203,7 +184,7 @@ class AdminAdmin extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorSuccess(obj,values,Actions, t.state.current,cb);
+                Actions.editorSuccess(obj,values,Actions,t.state.current);
             }
         });
     }
@@ -214,7 +195,7 @@ class AdminAdmin extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addAdmin(obj,values,Actions,cb);
+                Actions.addAdmin(obj,values,Actions);
             }
         });
     }
@@ -222,14 +203,13 @@ class AdminAdmin extends React.Component {
     //移除没用
     remove(id){
         let t = this;
-        let obj = sessionStorage.getItem("admin_token");
-        Actions.deleteOne(obj,id,Actions,t.state.current);
+        cb("正在开发中");
     }
 
     //修改
     amend(id){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getEditorAdmin(obj,id,message);
+        Actions.getEditorAdmin(obj,id);
     }
 
     //分页
@@ -249,8 +229,9 @@ class AdminAdmin extends React.Component {
         return t.state.addVisible?<div>
         <Modal visible={true}
                 closable ={false}
+                title = "添加管理员"
                 footer={null}>
-            <AdminGroupForm  ok={this.addOk} cancel={this.handleCancel} adminGroupList = {t.state.adminGroupList}/>
+            <AdminsForm  ok={this.addOk} cancel={this.handleCancel} adminGroupList = {t.state.adminGroupList}/>
             </Modal>
             </div>:"";
     }
@@ -260,9 +241,10 @@ class AdminAdmin extends React.Component {
         return t.state.visible?<div>
         <Modal visible={true}
         closable ={false}
+        title = "修改管理员"
         footer={null}
             >
-            <AdminGroupForm adminGroupList = {t.state.adminGroupList}
+            <AdminsForm adminGroupList = {t.state.adminGroupList}
                             formdata = {t.state.editorOne}
                             ok={this.handleOk}
                             cancel={this.handleCancel} typePopPu="edit"/>
@@ -278,28 +260,28 @@ class AdminAdmin extends React.Component {
             render: text => <span style={{"display":"none"}}>{text}</span>,
         },{
             dataIndex: 'admin_id',
-                width:1,
-                render: text => <span style={{"display":"none"}}>{text}</span>,
+            width:1,
+            render: text => <span style={{"display":"none"}}>{text}</span>,
         },{
             title: '管理员名称',
-                dataIndex: 'admin_name',
+            dataIndex: 'admin_name',
         },{
             title: '电子邮件',
-                dataIndex: 'email'
+            dataIndex: 'email'
         },{
             title: '管理组名称',
-                dataIndex: 'admin_group_name',
+            dataIndex: 'admin_group_name',
         },{
             title: '手机号码',
-                dataIndex: 'mobile',
+            dataIndex: 'mobile',
         },{
             title: '真实名字',
-                dataIndex: 'real_name',
+            dataIndex: 'real_name',
         },{
             title: '操作',
-                width:100,
-                key: 'action',
-                render: (text, record) => (
+            width:100,
+            key: 'action',
+            render: (text, record) => (
             <span>
             <a onClick={t.remove.bind(t,record["admin_id"])}>删除</a>
             <span className="ant-divider" />
@@ -308,21 +290,21 @@ class AdminAdmin extends React.Component {
         ),
         }];
         const rowSelection = {
-                onChange: (selectedRowKeys, selectedRows) => {
-                console.log('selectedRowKeys: ${selectedRowKeys}', 'selectedRows: ', selectedRows);
+            onChange: (selectedRowKeys, selectedRows) => {
+            //console.log('selectedRowKeys: ${selectedRowKeys}', 'selectedRows: ', selectedRows);
         },
         onSelect: (record, selected, selectedRows) => {
-            console.log(record, selected, selectedRows);
+            //console.log(record, selected, selectedRows);
         },
         onSelectAll: (selected, selectedRows, changeRows) => {
-            console.log(selected, selectedRows, changeRows);
+            //console.log(selected, selectedRows, changeRows);
         },
         getCheckboxProps: record => ({
             disabled: record.name === 'Disabled User',    // Column configuration not to be checked
         }),
     };
 
-        let  coo ={
+        let coo ={
             total: t.state.total,
             current: t.state.current,
             pageSize:10,

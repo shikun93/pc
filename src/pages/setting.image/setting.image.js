@@ -8,25 +8,14 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Breadcrumb,Icon,Button, Form, Input,message,Upload,Tabs,Radio,Modal } from 'antd';
+import { Breadcrumb,Icon,Button, Form, Input,Upload,Tabs,Radio,Modal } from 'antd';
 import './setting.image.less';
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 const RadioGroup = Radio.Group;
 
-const cb =function(err){
-    message.error(err);
-}
-
-class ImageTypeForm extends React.Component {
-    state = {
-    }; 
-
-    render() {
-        let t = this;
-        const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
+const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
                 sm: { span: 4 },
@@ -37,13 +26,20 @@ class ImageTypeForm extends React.Component {
             },
         };
 
-        const formItemLayout1 = {
+const formItemLayout1 = {
             wrapperCol: {
                 xs: { span: 24 },
                 sm: { span: 5,offset:4 },
             },
         };
+class ImageTypeForm extends React.Component {
+    state = {
+    }; 
 
+    render() {
+        let t = this;
+        const { getFieldDecorator } = this.props.form;
+        
         return (
             <Form>
                 <FormItem
@@ -77,7 +73,6 @@ class ImageTypeForm extends React.Component {
 const ImageTypesForm = Form.create()(ImageTypeForm);
 
 
-
 class DefaultImageForm extends React.Component {
     state = {
         imgValue1:'',
@@ -85,8 +80,6 @@ class DefaultImageForm extends React.Component {
         imgValue3:'',
         imgValue4:''
     }; 
-
-
 
     normFile1 = (e) => {
        if(e.file.response){
@@ -147,24 +140,6 @@ class DefaultImageForm extends React.Component {
         let t = this;
         let token = sessionStorage.getItem("admin_token");
         const { getFieldDecorator } = this.props.form;
-
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 4 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 5 },
-            },
-        };
-
-         const formItemLayout1 = {
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 5,offset:4 },
-            },
-        };
         
         return (
             <Form>
@@ -292,15 +267,15 @@ class SettingImage extends React.Component {
     componentDidMount(){
         let t = this;
         let token = sessionStorage.getItem("admin_token");
-        Actions.settingType(token,cb);
-        Actions.settingImage(token,cb);
+        Actions.settingType(token);
+        Actions.settingImage(token);
     }
 
     submitType(){
         let token = sessionStorage.getItem("admin_token");
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                Actions.settingType(token,cb,values,Actions,Modal);
+                Actions.settingType(token,values,Actions,Modal);
             }
         });
     }
@@ -309,7 +284,7 @@ class SettingImage extends React.Component {
         let token = sessionStorage.getItem("admin_token");
         t.props.form.validateFields((err, values) => {
             if (!err) {
-                Actions.settingImage(token,cb,values,Actions,Modal);
+                Actions.settingImage(token,values,Actions,Modal);
             }
         });
     }

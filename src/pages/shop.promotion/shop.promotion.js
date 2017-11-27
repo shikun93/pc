@@ -5,14 +5,9 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Breadcrumb,Button,Form,message,Switch,Input,Modal} from 'antd';
+import { Breadcrumb,Button,Form,Switch,Modal} from 'antd';
 const FormItem = Form.Item;
 import './shop.promotion.less';
-
-const cb =function(err){
-    message.error(err);
-}
-
 
 //修改/添加公用表单
 class ShopPromotionForm extends React.Component {
@@ -141,14 +136,14 @@ class ShopPromotion extends React.Component {
     componentDidMount(){
         let t = this;
         let token = sessionStorage.getItem("admin_token");
-        Actions.promotion(token,cb);
+        Actions.promotion(token);
     }   
     
     submitPromotion(){
         let token = sessionStorage.getItem("admin_token");
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                Actions.promotion(token,cb,values,Actions,Modal);
+                Actions.promotion(token,values,Actions,Modal);
             }
         });
     }

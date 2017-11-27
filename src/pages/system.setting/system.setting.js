@@ -8,15 +8,11 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Breadcrumb,Button,Form,Input,message,Tabs,Modal,Row,Col } from 'antd';
+import { Breadcrumb,Button,Form,Input,Tabs,Modal,Row,Col } from 'antd';
 import './system.setting.less';
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
-
-const cb =function(err){
-    message.error(err);
-}
 
 class SystemSettingForm extends React.Component {
     state = {
@@ -137,16 +133,15 @@ class SystemSetting extends React.Component {
     componentDidMount(){
         let t = this;
         let token = sessionStorage.getItem("admin_token");
-        Actions.emailSetting(token,cb);
+        Actions.emailSetting(token);
     }
 
     settingEmail(){
-        console.log(1);
         let token = sessionStorage.getItem("admin_token");
         this.props.form.validateFields((err, values) => {
             console.log(err,values);
             if (!err) {
-                Actions.emailSetting(token,cb,values,Actions,Modal);
+                Actions.emailSetting(token,values,Actions,Modal);
             }
         });
     }
@@ -155,7 +150,7 @@ class SystemSetting extends React.Component {
         let token = sessionStorage.getItem("admin_token");
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                Actions.testEmail(token,cb,values,Modal);
+                Actions.testEmail(token,values,Modal);
             }
         });
     }

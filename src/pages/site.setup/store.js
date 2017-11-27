@@ -14,7 +14,7 @@ var Store =  Reflux.createStore({
     data: {
         formData:{}
     },
-    onSiteSetting:function(token,cb,values,Actions,Modal){
+    onSiteSetting:function(token,values,Actions,Modal){
         let t = this;
         let obj;
 
@@ -42,13 +42,14 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error ==""){
                     if(result.data ==1){
-                        Actions.siteSetting(token,cb);
+                        Actions.siteSetting(token);
                         const modal = Modal.success({
                             title: '保存成功',
                             content: '页面1s后自动关闭',
                         });
                         setTimeout(() => modal.destroy(), 1000);
                     }else{
+                        let data = result.data;
                         t.data.formData = result.data;
                         t.updateComponent(); 
                     }

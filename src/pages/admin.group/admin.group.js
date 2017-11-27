@@ -7,32 +7,16 @@ import ReactMixin from 'react-mixin';
 import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
-import { Table,Breadcrumb,Icon,Modal,Button, Form, Input, Tooltip,Tree,message } from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button, Form, Input,Tree} from 'antd';
 const FormItem = Form.Item;
 const TreeNode = Tree.TreeNode;
 
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-    },
-};
-
 import './admin.group.less';
 
-const cb =function(err){
-    message.error(err);
-}
-
-
 //修改/添加公用表单
-class AdminForm extends React.Component {
+class AdminGroupForm extends React.Component {
     state = {
-        confirmDirty: false,
+       
     };
 
 
@@ -79,7 +63,7 @@ class AdminForm extends React.Component {
         {getFieldDecorator('admin_group_name', {
             initialValue: t.props.typePopPu == "edit"?t.props.formdata["admin_group_name"]:"",
             rules: [ {
-                required: true, message: 'Please input your admin_group_namele!',
+                required: true, message: '请填写管理员组名!',
             }],
         })(
         <Input />
@@ -93,7 +77,7 @@ class AdminForm extends React.Component {
         {getFieldDecorator('description', {
             initialValue: t.props.typePopPu == "edit"?t.props.formdata.description:"",
             rules: [ {
-                required: true, message: 'Please input your description!',
+                required: true, message: '请填写描述内容!',
             }],
         })(
         <Input />
@@ -127,7 +111,7 @@ class AdminForm extends React.Component {
             {getFieldDecorator('sort_order', {
                 initialValue: t.props.typePopPu == "edit"?t.props.formdata["sort_order"]:"",
                 rules: [{
-                    required: true, message: 'Please confirm your number!',
+                    required: true, message: '请选择权限!',
                 }],
             })(
             <Input type="number" />
@@ -136,7 +120,7 @@ class AdminForm extends React.Component {
         <FormItem>
             <Button key="back" size="large" onClick={this.props.cancel}>取消</Button>,
             <Button key="submit" type="primary" size="large"  onClick={this.props.ok.bind(this,this.props.current)}>
-                确认
+                <span style={{color:"#fff"}}>确认</span>
             </Button>
         </FormItem>
         </Form>
@@ -144,7 +128,7 @@ class AdminForm extends React.Component {
     }
 }
 
-const AdminGroupForm = Form.create()(AdminForm);
+const AdminGroupsForm = Form.create()(AdminGroupForm);
 
 
 //组件类
@@ -164,8 +148,8 @@ class AdminGroup extends React.Component {
     componentDidMount(){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getAdminGroupList(obj,1,cb);
-        Actions.getPublicGetmenutree(obj,cb);
+        Actions.getAdminGroupList(obj,1);
+        Actions.getPublicGetmenutree(obj);
     }
     //取消
     handleCancel(){
@@ -178,7 +162,7 @@ class AdminGroup extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorSuccess(obj,values,Actions, current,cb);
+                Actions.editorSuccess(obj,values,Actions, current);
             }
         });
 
@@ -190,7 +174,7 @@ class AdminGroup extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addList(obj,values,Actions,cb);
+                Actions.addList(obj,values,Actions);
             }
         });
     }
@@ -198,20 +182,21 @@ class AdminGroup extends React.Component {
     //移除没用
     remove(id){
         let t = this;
-        let obj = sessionStorage.getItem("admin_token");
-        Actions.deleteOne(obj,id,Actions,t.state.current);
+        cb("待开发")
+        //let obj = sessionStorage.getItem("admin_token");
+        //Actions.deleteOne(obj,id,Actions,t.state.current);
     }
 
     //修改
     amend(id){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.editorList(obj,id,cb);
+        Actions.editorList(obj,id);
     }
 
     //分页
     onChange(page){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getAdminGroupList(obj,page,cb);
+        Actions.getAdminGroupList(obj,page);
     }
 
     //添加
@@ -223,10 +208,11 @@ class AdminGroup extends React.Component {
         let t = this;
         return t.state.addVisible?<div>
         <Modal visible={true}
+        title = "添加管理员组"
         closable ={false}
         footer={null}
             >
-            <AdminGroupForm  list={t.state.jurisdictionList}
+            <AdminGroupsForm  list={t.state.jurisdictionList}
                             ok={this.addOk}
                             cancel={this.handleCancel}
                             checkedValues={t.checkedValue.bind(t)}
@@ -254,10 +240,11 @@ class AdminGroup extends React.Component {
         let t = this;
         return t.state.visible?<div>
         <Modal visible={true}
+        title = "修改管理员组"
         closable ={false}
         footer={null}
             >
-            <AdminGroupForm  list={t.state.jurisdictionList}
+            <AdminGroupsForm  list={t.state.jurisdictionList}
                             checkedValues={t.checkedValue}
                             formdata = {t.state.editorAdminData}
                             changeKeys={t.state.changeKeys}

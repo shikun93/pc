@@ -15,7 +15,7 @@ var Store =  Reflux.createStore({
       typeStr:'',
       imageObj:{}
     },
-    onSettingType:function(token,cb,values,Actions,Modal){
+    onSettingType:function(token,values,Actions,Modal){
         let t = this;
         let obj = {
             admin_token:token,
@@ -34,7 +34,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error ==""){
                     if(result.data ==1){
-                        Actions.settingType(token,cb);
+                        Actions.settingType(token);
                         const modal = Modal.success({
                             title: '保存成功',
                             content: '页面1s后自动关闭',
@@ -56,7 +56,7 @@ var Store =  Reflux.createStore({
         });
 
     },
-    onSettingImage:function(token,cb,values,Actions,Modal){
+    onSettingImage:function(token,values,Actions,Modal){
         let t = this;
         let obj = {
             admin_token:token,
@@ -82,7 +82,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error ==""){
                     if(result.data ==1){
-                        Actions.settingImage(token,cb);
+                        Actions.settingImage(token);
                         const modal = Modal.success({
                             title: '保存成功',
                             content: '页面1s后自动关闭',

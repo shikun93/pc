@@ -14,7 +14,7 @@ var Store =  Reflux.createStore({
     data: {
         promotionObj:{}
     },
-    onPromotion:function(token,cb,values,Actions,Modal){
+    onPromotion:function(token,values,Actions,Modal){
         let t = this;
         let obj = {
             admin_token:token,
@@ -38,7 +38,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error ==""){
                     if(result.data ==1){
-                        Actions.promotion(token,cb);
+                        Actions.promotion(token);
                         const modal = Modal.success({
                             title: '保存成功',
                             content: '页面1s后自动关闭',

@@ -9,12 +9,8 @@ import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
 import ClassForm from'../../components/shop.class.form/class.form';
-import { Table,Breadcrumb,Icon,Modal,Button,message } from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button } from 'antd';
 import './admin.shop.less';
-
-const cb =function(err){
-    message.error(err);
-}
 
 //组件类
 class Brand extends React.Component {
@@ -30,7 +26,7 @@ class Brand extends React.Component {
     componentDidMount(){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getList(obj,1,cb,0);
+        Actions.getList(obj,1,0);
         Actions.getClassList(obj);
         Actions.getTypeList(obj);
     }
@@ -45,7 +41,7 @@ class Brand extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorSuccess(obj,values,Actions, t.state.current,cb);
+                Actions.editorSuccess(obj,values,Actions,t.state.current);
             }
         });
 
@@ -57,7 +53,7 @@ class Brand extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addList(obj,values,Actions,cb);
+                Actions.addList(obj,values,Actions);
             }
         });
     }
@@ -72,13 +68,13 @@ class Brand extends React.Component {
     //修改
     amend(id){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.editorList(obj,id,cb);
+        Actions.editorList(obj,id);
     }
 
     //分页
     onChange(page){
         let token = sessionStorage.getItem("admin_token");
-        Actions.getBrandList(token,page,cb);
+        Actions.getBrandList(token,page);
     }
 
     //添加
@@ -104,6 +100,8 @@ class Brand extends React.Component {
         return t.state.addVisible?<div>
         <Modal visible={true}
         closable ={false}
+        title = "添加商品分类"
+        wrapClassName = "modal_style"
         footer={null}
             >
             <ClassForm      ok={this.addOk}
@@ -118,7 +116,11 @@ class Brand extends React.Component {
     onpopup(){
         let t = this;
         return t.state.visible?<div>
-        <Modal visible={true} closable ={false} footer={null}>
+        <Modal visible={true} 
+            closable ={false} 
+            footer={null}
+            title = "修改商品分类"
+            wrapClassName = "modal_style">
             <ClassForm      classList={t.state.classList}
                             typeList={t.state.typeList}
                             formdata = {t.state.editorAdminData}
@@ -160,17 +162,17 @@ class Brand extends React.Component {
         ),
         }];
         const rowSelection = {
-                onChange: (selectedRowKeys, selectedRows) => {
+            onChange: (selectedRowKeys, selectedRows) => {
                // console.log('selectedRowKeys: ${selectedRowKeys}', 'selectedRows: ', selectedRows);
         },
-        onSelect: (record, selected, selectedRows) => {
+            onSelect: (record, selected, selectedRows) => {
             //console.log(record, selected, selectedRows);
         },
-        onSelectAll: (selected, selectedRows, changeRows) => {
+            onSelectAll: (selected, selectedRows, changeRows) => {
             //console.log(selected, selectedRows, changeRows);
         },
-        getCheckboxProps: record => ({
-            disabled: record.name === 'Disabled User',    // Column configuration not to be checked
+            getCheckboxProps: record => ({
+                disabled: record.name === 'Disabled User',    // Column configuration not to be checked
         }),
     };
 

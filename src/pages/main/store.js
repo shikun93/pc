@@ -56,6 +56,11 @@ var Store =  Reflux.createStore({
           
         });
     },
+    onSetList:function(arr){
+        let t = this;
+        t.data.arr = arr;
+        t.updateComponent();
+    },
     onGetQuitLoading:function(token,cb){
         let t = this;
         

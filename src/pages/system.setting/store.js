@@ -14,7 +14,7 @@ var Store =  Reflux.createStore({
     data: {
         formData:{}
     },
-    onEmailSetting:function(token,cb,values,Actions,Modal){
+    onEmailSetting:function(token,values,Actions,Modal){
         let t = this;
         
         let obj;
@@ -43,7 +43,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error ==""){
                     if(result.data ==1){
-                        Actions.emailSetting(token,cb);
+                        Actions.emailSetting(token);
                         const modal = Modal.success({
                             title: '保存成功',
                             content: '页面1s后自动关闭',
@@ -64,7 +64,7 @@ var Store =  Reflux.createStore({
         });
 
     },
-    onTestEmail:function(token,cb,values,Modal){
+    onTestEmail:function(token,values,Modal){
         let t = this;
     
         let obj = qs.stringify({

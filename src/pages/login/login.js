@@ -24,10 +24,19 @@ class Login extends React.Component{
     }
     componentWillMount(){
         let t = this;
-
     }
     componentDidMount(){
         let t = this;
+        let arr = document.cookie.split(";");
+        if(arr[0]!=""){
+           arr = arr[0].split("&");
+           let admin = {};
+           arr.map(function(item,index){
+                let arr1 = item.split("=");
+                admin[arr1[0]] = arr1[1]; 
+           }) 
+           Actions.getChange("all",admin);
+        } 
         $(document).keyup(function(e){
             if(e.keyCode==13){
                 t.loaded();
@@ -40,6 +49,7 @@ class Login extends React.Component{
    }
 
     loaded(){
+        let t = this;
         Actions.loading(cb);
     }
 
@@ -58,27 +68,27 @@ class Login extends React.Component{
                                     <div className="form-group">
                                         <label htmlFor="inputEmail3" className="col-sm-3 control-label">用户名</label>
                                         <div className="col-sm-9">
-                                        <input ref="input1" type="text" className="form-control" id="inputEmail3" placeholder="username" value={t.state.username} onChange={t.changeValue}/>
+                                        <input type="text" className="form-control" id="inputEmail3" placeholder="username" value={t.state.username} onChange={t.changeValue}/>
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="inputPassword3" className="col-sm-3 control-label">密码</label>
                                         <div className="col-sm-9">
-                                        <input ref="input2" type="password" className="form-control" id="inputPassword3" placeholder="Password" value={t.state.password} onChange={t.changeValue} />
+                                        <input type="password" className="form-control" id="inputPassword3" placeholder="Password" value={t.state.password} onChange={t.changeValue} />
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <div className="col-sm-offset-3 col-sm-9">
                                             <div className="checkbox">
                                                 <label>
-                                                    <input type="checkbox" /> 记住我
+                                                    <input type="checkbox" onChange={t.changeValue} value={t.state.checkbox}/> 记住我
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <div className="col-sm-offset-3 col-sm-9">
-                                            <a className="btn btn-default" onClick={t.loaded.bind(t)}>登陆</a>
+                                            <a className="btn btn-default" onClick={t .loaded.bind(t)}>登陆</a>
                                         </div>
                                     </div>
                                 </form>

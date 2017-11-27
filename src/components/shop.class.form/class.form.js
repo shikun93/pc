@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon,Button, Form, Input,Select,Switch,Row, Col,Checkbox,Radio } from 'antd';
+import { Button, Form, Input,Select,Checkbox,Radio } from 'antd';
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
@@ -30,17 +30,17 @@ class ShopTypeForm extends React.Component {
             let a = t.props.typeList[key];
             if(Array.isArray(a['goods_type'])){
                 a['goods_type'].map(function(item,index){
-                    arr.push(<Radio value={item['goods_type_id']+' '+item['goods_type_name']}>{item['goods_type_name']}</Radio>);
+                    arr.push(<Radio key={index} value={item['goods_type_id']+' '+item['goods_type_name']}>{item['goods_type_name']}</Radio>);
                 }) 
             }else{
                  for(let k in a['goods_type']){
-                     arr.push(<Radio value={a['goods_type'][k]['goods_type_id']+' '+a['goods_type'][k]['goods_type_name']}>{a['goods_type'][k]['goods_type_name']}</Radio>);
+                     arr.push(<Radio key={k} value={a['goods_type'][k]['goods_type_id']+' '+a['goods_type'][k]['goods_type_name']}>{a['goods_type'][k]['goods_type_name']}</Radio>);
                  }
             }
          }
          for(let keys in t.props.classList){
              let item = t.props.classList[keys];
-            arr1.push(<Option value={item['goods_class_id']}>{item['goods_class_name']}</Option>);
+            arr1.push(<Option key={item['goods_class_id']} value={item['goods_class_id']}>{item['goods_class_name']}</Option>);
         }
         return (
             <Form>
@@ -70,10 +70,9 @@ class ShopTypeForm extends React.Component {
         <FormItem
         {...formItemLayout}
         label="发布虚拟商品"
-        hasFeedback
         >
         {getFieldDecorator('can_virtual', {
-            initialValue: t.props.typePopPu == "edit"?t.props.formdata['can_virtual']:"",
+            initialValue: t.props.typePopPu == "edit"?t.props.formdata['can_virtual']:["0"],
         })(
             <CheckboxGroup options={ops}/>
         )}
@@ -168,7 +167,7 @@ class ShopTypeForm extends React.Component {
              <Input / >
         )}
         </FormItem>
-        <FormItem>
+        <FormItem className="but">
             <Button key="back" size="large" onClick={this.props.cancel}>取消</Button>,
             <Button key="submit" type="primary" size="large"  onClick={this.props.ok.bind(this,this.props.id)}>
                 确认

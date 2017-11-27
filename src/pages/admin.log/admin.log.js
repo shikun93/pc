@@ -7,18 +7,11 @@ import ReactMixin from 'react-mixin';
 import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
-import { Table,Breadcrumb,Icon,Button, Form, Input,message,DatePicker,Row,Col } from 'antd';
+import { Table,Breadcrumb,Button,Form,Input,DatePicker,Row,Col } from 'antd';
 const FormItem = Form.Item;
 const RangePicker  = DatePicker.RangePicker;
 
-const cb =function(err){
-    message.error(err);
-}
-
 import './admin.log.less';
-
-
-
 
 //修改/添加公用表单
 class AdminLogForm extends React.Component {
@@ -116,7 +109,6 @@ class AdminLog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bol:false
         };
     }
     componentWillMount(){
@@ -128,14 +120,14 @@ class AdminLog extends React.Component {
     componentDidMount(){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getAdminLog(obj,{},1,cb);
+        Actions.getAdminLog(obj,{},1);
     }
 
     //分页
     onChange(page){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getAdminLog(obj,t.state.values,page,cb);
+        Actions.getAdminLog(obj,t.state.values,page);
     }
 
     inquiry(){
@@ -147,7 +139,7 @@ class AdminLog extends React.Component {
                     values.start_time = values.time[0].format('YYYY-MM-DD')+" 00:00:00";
                      values.end_time = values.time[1].format('YYYY-MM-DD')+" 23:59:59"; 
                  }
-                Actions.getAdminLog(obj,values,1,cb);
+                Actions.getAdminLog(obj,values,1);
             }
         });
     }
@@ -156,26 +148,26 @@ class AdminLog extends React.Component {
         let t = this;
         const columns = [{
             title: '管理员名称',
-                dataIndex: 'admin_name',
+            dataIndex: 'admin_name',
         },{
             title: '内容',
-                dataIndex: 'record'
+            dataIndex: 'record'
         },{
             title: 'IP地址',
-                dataIndex: 'ip',
+            dataIndex: 'ip',
         },{
             title: '添加时间',
-                dataIndex: 'add_time',
+            dataIndex: 'add_time',
         }];
         const rowSelection = {
-                onChange: (selectedRowKeys, selectedRows) => {
-                console.log('selectedRowKeys: ${selectedRowKeys}', 'selectedRows: ', selectedRows);
+            onChange: (selectedRowKeys, selectedRows) => {
+            //console.log('selectedRowKeys: ${selectedRowKeys}', 'selectedRows: ', selectedRows);
         },
         onSelect: (record, selected, selectedRows) => {
-            console.log(record, selected, selectedRows);
+            //console.log(record, selected, selectedRows);
         },
         onSelectAll: (selected, selectedRows, changeRows) => {
-            console.log(selected, selectedRows, changeRows);
+            //console.log(selected, selectedRows, changeRows);
         },
         getCheckboxProps: record => ({
             disabled: record.name === 'Disabled User',    // Column configuration not to be checked
@@ -192,7 +184,7 @@ class AdminLog extends React.Component {
             <div className="admin_log">
             <Breadcrumb className="bread_style">
             <Breadcrumb.Item><a href="">后台管理</a></Breadcrumb.Item>
-            <Breadcrumb.Item>管理员管理</Breadcrumb.Item>
+            <Breadcrumb.Item>管理员日志</Breadcrumb.Item>
             </Breadcrumb>
             <div className="inquiry_form">
                 <AdminLogsForm  ok={this.inquiry} />

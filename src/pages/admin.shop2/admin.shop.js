@@ -9,15 +9,9 @@ import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
 import ClassForm from'../../components/shop.class.form/class.form';
-import { Table,Breadcrumb,Icon,Modal,Button, Form, Input, Tooltip,message,Select,Radio,Switch,Row, Col,Upload } from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button,Form,Input} from 'antd';
 const FormItem = Form.Item;
-const RadioGroup = Radio.Group;
-const Option = Select.Option;
 import './admin.shop.less';
-
-const cb =function(err){
-    message.error(err);
-}
 
 //组件类
 class Brand extends React.Component {
@@ -34,7 +28,7 @@ class Brand extends React.Component {
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
         let id = t.props.location.query.id;
-        Actions.getList(obj,1,cb,id);
+        Actions.getList(obj,1,id);
         Actions.getClassList(obj);
         Actions.getTypeList(obj);
     }
@@ -49,7 +43,7 @@ class Brand extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorSuccess(obj,values,Actions, t.state.current,cb,id);
+                Actions.editorSuccess(obj,values,Actions, t.state.current,id);
             }
         });
 
@@ -61,7 +55,7 @@ class Brand extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addList(obj,values,Actions,cb,id);
+                Actions.addList(obj,values,Actions,id);
             }
         });
     }
@@ -76,13 +70,13 @@ class Brand extends React.Component {
     //修改
     amend(id){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.editorList(obj,id,cb);
+        Actions.editorList(obj,id);
     }
 
     //分页
     onChange(page){
         let token = sessionStorage.getItem("admin_token");
-        Actions.getBrandList(token,page,cb);
+        Actions.getBrandList(token,page);
     }
 
     //添加
@@ -109,6 +103,8 @@ class Brand extends React.Component {
         <Modal visible={true}
         closable ={false}
         footer={null}
+        title = "添加商品分类"
+        wrapClassName = "modal_style"
             >
             <ClassForm      ok={this.addOk}
                             cancel={this.handleCancel}
@@ -123,7 +119,11 @@ class Brand extends React.Component {
     onpopup(){
         let t = this;
         return t.state.visible?<div>
-        <Modal visible={true} closable ={false} footer={null}>
+        <Modal visible={true} 
+            closable ={false} 
+            footer={null}
+            title = "修改商品分类"
+            wrapClassName = "modal_style">
             <ClassForm      classList={t.state.classList}
                             typeList={t.state.typeList}
                             formdata = {t.state.editorAdminData}

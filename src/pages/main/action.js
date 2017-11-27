@@ -10,7 +10,8 @@ var Actions = Reflux.createActions([
     "setAdminPassword",
     "showHtml",
     "cancel",
-    "getPattern"
+    "getPattern",
+    "setList"
 ]);
 
 module.exports = Actions;

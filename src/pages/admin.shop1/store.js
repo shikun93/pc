@@ -26,7 +26,7 @@ var Store =  Reflux.createStore({
         t.data.addVisible = true;
         t.updateComponent();
     },
-    onGetList:function(token,page,cb,id){
+    onGetList:function(token,page,id){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -41,7 +41,7 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
                 if(result.error ==""){
-                    t.data.list = result.data["goods_class_list"];
+                    t.data.list = addKeyFun(result.data["goods_class_list"]);
                     t.data.total = result.ext["total_num"];
                     t.data.current = page;
                     t.updateComponent();
@@ -104,7 +104,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditorList:function(token,id,cb){
+    onEditorList:function(token,id){
         let t = this;
         let imgObj = [];
         let obj = qs.stringify({
@@ -121,7 +121,8 @@ var Store =  Reflux.createStore({
                 if(result.error == ""){
                     t.data.visible = true;
                     let obj = result.data["goods_class_info"];
-                    obj['goods_type_name'] = obj['goods_type_id']+' '+obj['goods_type_name']
+                    obj['goods_type_name'] = obj['goods_type_id']+' '+obj['goods_type_name'];
+                    obj['can_virtual'] = [obj['can_virtual']];
                     t.data.editorAdminData = obj;
                     t.updateComponent();
                 }else{
@@ -132,48 +133,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onAddList:function(token,values,Actions,cb,id){
-        let t = this,typeId,typeName;
-        if(values['goods_type_name'] ===undefined){
-           typeId = '';
-           typeName = '';
-        }else{
-            let arr = values['goods_type_name'].split(' ');
-            typeId = arr[0];
-            typeName = arr[1];
-        }
-        let obj = qs.stringify({
-            admin_token:token,
-            goods_class_name:values["goods_class_name"],
-            goods_type_id:typeId,
-            goods_type_name:typeName,
-            goods_class_parent_id:values["goods_class_parent_id"],
-            commis_rate:values["commis_rate"],
-            can_virtual:values["can_virtual"],
-            show_type:values["show_type"],
-            lp_tax:values["lp_tax"],
-            is_show:values["is_show"],
-            sort_order:values["sort_order"],
-        });
-        fetch(urlhttp+"/admin.shop_goods_class/addone",{method:"post",body:obj,headers:{
-            "Content-Type":"application/x-www-form-urlencoded"
-        }})
-            .then(function(response){
-                return response.json();
-            }).then(function(result){
-                if(result.error == ""){
-                    t.data.addVisible = false;
-                    Actions.getList(token,1,cb,id);
-                    t.updateComponent();
-                }else{
-                    cb(result.error);
-                }
-           
-        }).catch(function(error){
-            console.log(error);
-        });
-    },
-    onEditorSuccess:function(token,values,Actions,page,cb,id){
+    onAddList:function(token,values,Actions,id){
         let t = this,typeId,typeName,can_virtual;
         if(values["can_virtual"][1] != undefined){
             can_virtual = 1;
@@ -195,7 +155,53 @@ var Store =  Reflux.createStore({
             goods_type_name:typeName,
             goods_class_parent_id:values["goods_class_parent_id"],
             commis_rate:values["commis_rate"],
-            can_virtual:values["can_virtual"],
+            can_virtual:can_virtual,
+            show_type:values["show_type"],
+            lp_tax:values["lp_tax"],
+            is_show:values["is_show"],
+            sort_order:values["sort_order"],
+        });
+        fetch(urlhttp+"/admin.shop_goods_class/addone",{method:"post",body:obj,headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        }})
+            .then(function(response){
+                return response.json();
+            }).then(function(result){
+                if(result.error == ""){
+                    t.data.addVisible = false;
+                    Actions.getList(token,1,id);
+                    t.updateComponent();
+                }else{
+                    cb(result.error);
+                }
+           
+        }).catch(function(error){
+            console.log(error);
+        });
+    },
+    onEditorSuccess:function(token,values,Actions,page,id){
+        let t = this,typeId,typeName,can_virtual;
+        if(values["can_virtual"][1] != undefined){
+            can_virtual = 1;
+        }else{
+            can_virtual = 0;
+        }
+        if(values['goods_type_name'] ===undefined){
+           typeId = '';
+           typeName = '';
+        }else{
+            let arr = values['goods_type_name'].split(' ');
+            typeId = arr[0];
+            typeName = arr[1];
+        }
+        let obj = qs.stringify({
+            admin_token:token,
+            goods_class_name:values["goods_class_name"],
+            goods_type_id:typeId,
+            goods_type_name:typeName,
+            goods_class_parent_id:values["goods_class_parent_id"],
+            commis_rate:values["commis_rate"],
+            can_virtual:can_virtual,
             show_type:values["show_type"],
             lp_tax:values["lp_tax"],
             is_show:values["is_show"],
@@ -211,7 +217,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error == ""){
                     t.data.visible = false;
-                    Actions.getList(token,page,cb,id);
+                    Actions.getList(token,page,id);
                     t.updateComponent();
                 }else{
                     cb(result.error);
