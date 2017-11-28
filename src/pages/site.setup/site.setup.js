@@ -28,7 +28,7 @@ class SiteSetupForm extends React.Component {
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 5 },
+                sm: { span: 6 },
             },
         };
 

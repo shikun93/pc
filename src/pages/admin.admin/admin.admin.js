@@ -36,7 +36,7 @@ class AdminForm extends React.Component {
 
         return (
             <Form>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                     {getFieldDecorator('admin_id', {
                         initialValue: t.props.typePopPu == "edit"?t.props.formdata["admin_id"]:"",
                     })(

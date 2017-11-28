@@ -22,7 +22,7 @@ var Store =  Reflux.createStore({
         t.data.addVisible = true;
         t.updateComponent();
     },
-   onGetLayoutStyleList:function(token,page,id,cb){
+   onGetLayoutStyleList:function(token,page,id){
        let t = this;
        let obj = qs.stringify({
             admin_token:token,
@@ -37,7 +37,7 @@ var Store =  Reflux.createStore({
                return response.json();
            }).then(function(result){
             if(result.error==""){
-                t.data.list = result.data["style_list"];
+                t.data.list = addKeyFun(result.data["style_list"]);
                 t.data.total = result.ext["total_num"];
                 t.data.current = page;
                 t.updateComponent();
@@ -49,7 +49,7 @@ var Store =  Reflux.createStore({
            
        });
    },
-    onAddLayoutStyle:function(token,values,id,Actions,cb){
+    onAddLayoutStyle:function(token,values,id,Actions){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -66,7 +66,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error==""){
                     t.data.addVisible = false;
-                    Actions.getLayoutStyleList(token,1,id,cb);
+                    Actions.getLayoutStyleList(token,1,id);
                     t.updateComponent();
                 }else{
                     cb(result.error);
@@ -74,7 +74,7 @@ var Store =  Reflux.createStore({
             
         });
     },
-    onGetEditorLayout:function(token,id,cb){
+    onGetEditorLayout:function(token,id){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -96,7 +96,7 @@ var Store =  Reflux.createStore({
                 }
         });
     },
-    onEditorSuccess:function(token,values,Actions,page,id,cb){
+    onEditorSuccess:function(token,values,Actions,page,id){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -113,7 +113,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error==""){
                     t.data.visible = false;
-                    Actions.getLayoutStyleList(token,page,id,cb);
+                    Actions.getLayoutStyleList(token,page,id);
                     t.updateComponent();
                 }else{
                     cb(result.error);

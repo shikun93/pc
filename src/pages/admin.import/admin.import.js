@@ -8,12 +8,8 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import './admin.import.less';
-import { Upload, message, Button, Icon,Breadcrumb } from 'antd';
+import { Upload, Button, Icon,Breadcrumb } from 'antd';
 import {urlhttp,urlhttps} from '../../app/url';
-
-const cb =function(err){
-    message.error(err);
-}
 
 //组件类
 class AdminImport extends React.Component {

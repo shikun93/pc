@@ -22,7 +22,7 @@ var Store =  Reflux.createStore({
         t.data.addVisible = true;
         t.updateComponent();
     },
-   onGetAdminModuleList:function(token,page,cb){
+   onGetAdminModuleList:function(token,page){
        let t = this;
        let obj = qs.stringify({
             admin_token:token,
@@ -36,7 +36,7 @@ var Store =  Reflux.createStore({
                return response.json();
            }).then(function(result){
             if(result.error==""){
-                t.data.list = result.data["layout_list"];
+                t.data.list = addKeyFun(result.data["layout_list"]);
                 t.data.total = result.ext["total_num"];
                 t.data.current = page;
                 t.updateComponent();
@@ -48,7 +48,7 @@ var Store =  Reflux.createStore({
            
        });
    },
-    onAddPageTemplate:function(token,values,Actions,cb){
+    onAddPageTemplate:function(token,values,Actions){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -64,14 +64,14 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error==""){
                     t.data.addVisible = false;
-                    Actions.getAdminModuleList(token,1,cb);
+                    Actions.getAdminModuleList(token,1);
                     t.updateComponent();
                 }else{
                     cb(result.error);
                 }  
         });
     },
-    onGetEditorAdminModule:function(token,id,cb){
+    onGetEditorAdminModule:function(token,id){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -93,7 +93,7 @@ var Store =  Reflux.createStore({
                 }
         });
     },
-    onEditorSuccess:function(token,values,Actions,page,cb){
+    onEditorSuccess:function(token,values,Actions,page){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -111,7 +111,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error==""){
                     t.data.visible = false;
-                    Actions.getAdminModuleList(token,page,cb);
+                    Actions.getAdminModuleList(token,page);
                     t.updateComponent();
                 }else{
                     cb(result.error);

@@ -26,7 +26,7 @@ var Store =  Reflux.createStore({
         t.data.addVisible = true;
         t.updateComponent();
     },
-    onGetBrandList:function(token,page,cb){
+    onGetBrandList:function(token,page){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -40,7 +40,7 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
                 if(result.error ==""){
-                    t.data.list = result.data["brand_list"];
+                    t.data.list = addKeyFun(result.data["brand_list"]);
                     t.data.total = result.ext["total_num"];
                     t.data.current = page;
                     t.updateComponent();
@@ -109,7 +109,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditorList:function(token,id,cb){
+    onEditorList:function(token,id){
         let t = this;
         let imgObj = [];
         let obj = qs.stringify({
@@ -143,7 +143,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onAddList:function(token,values,Actions,cb){
+    onAddList:function(token,values,Actions){
         let t = this;
         let goods_name ='';
         if(values["goods_class_name3"]!=undefined){
@@ -175,7 +175,7 @@ var Store =  Reflux.createStore({
                     t.data.addVisible = false;
                     t.data['goods_class_list_two'] = [];
                     t.data['goods_class_list_three'] = [];
-                    Actions.getBrandList(token,1,cb);
+                    Actions.getBrandList(token,1);
                     t.updateComponent();
                 }else{
                     cb(result.error);
@@ -185,7 +185,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditorSuccess:function(token,values,Actions,page,cb){
+    onEditorSuccess:function(token,values,Actions,page){
         let t = this;
         let goods_name ='';
         if(values["goods_class_name3"]!=undefined){
@@ -221,7 +221,7 @@ var Store =  Reflux.createStore({
                     t.data.visible = false;
                     t.data['goods_class_list_two'] = [];
                     t.data['goods_class_list_three'] = [];
-                    Actions.getBrandList(token,page,cb);
+                    Actions.getBrandList(token,page);
                     t.updateComponent();
                 }else{
                     cb(result.error);

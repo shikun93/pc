@@ -8,32 +8,16 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import Editors from '../../components/editor/editor';
-import { Table,Breadcrumb,Icon,Modal,Button, Form, Input, Tooltip, Cascader, Select, Row, Col, Checkbox,Radio,message } from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button, Form, Input,Radio } from 'antd';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-    },
-};
-
 import './table.less';
-
-const cb =function(err){
-    message.error(err);
-}
-
 
 //修改/添加公用表单
 class RegistrationForm extends React.Component {
     state = {
-        confirmDirty: false,
+        
     };
 
     render() {
@@ -56,7 +40,7 @@ class RegistrationForm extends React.Component {
         return (
             <Form>
             <FormItem
-                    {...formItemLayout}
+                    style={{margin:0}}
                     >
                     {getFieldDecorator('id', {
                         initialValue: t.props.typePopPu == "edit"?t.props.formdata["qa_id"]:"",
@@ -140,8 +124,8 @@ class RegistrationForm extends React.Component {
                 <FormItem>
                     <Button key="back" size="large" onClick={this.props.cancel}>取消</Button>,
                     <Button key="submit" type="primary" size="large"  onClick={this.props.ok.bind(this)}>
-                        确认
-                        </Button>
+                       <span style={{color:"#fff"}}>确认</span>
+                    </Button>
             </FormItem>
         </Form>
     );
@@ -169,7 +153,7 @@ class Table1 extends React.Component {
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
         let current = sessionStorage.getItem("tpage")?sessionStorage.getItem("tpage"):1;
-        Actions.getSu(obj,current,cb);
+        Actions.getSu(obj,current);
     }
     //取消
     handleCancel(){
@@ -184,7 +168,7 @@ class Table1 extends React.Component {
         this.props.form.validateFields(function(err,values){
             if(err==null){
                 console.log();
-                Actions.newlyIncreased(obj,values,Actions, current,cb);
+                Actions.newlyIncreased(obj,values,Actions, current);
             }
         });
 
@@ -196,7 +180,7 @@ class Table1 extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addFormData(obj,values,Actions,cb);
+                Actions.addFormData(obj,values,Actions);
             }
         });
     }
@@ -206,20 +190,20 @@ class Table1 extends React.Component {
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
         let current =sessionStorage.getItem("tpage");
-        Actions.deleteOne(obj,id,Actions,current,cb);
+        Actions.deleteOne(obj,id,Actions,current);
     }
 
     //修改
     amend(id){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getAmendData(obj,id,cb);
+        Actions.getAmendData(obj,id);
     }
 
     //分页
     onChange(page){
         let obj = sessionStorage.getItem("admin_token");
         sessionStorage.setItem("tpage",page);
-        Actions.getSu(obj,page,cb);
+        Actions.getSu(obj,page);
     }
 
     //添加
@@ -233,6 +217,7 @@ class Table1 extends React.Component {
             <Modal visible={true}
             closable ={false}
             footer={null}
+            title = "添加Qa"
             >
             <WrappedRegistrationForm  strHtml={this.compileHtmls}  ok={this.addOk} cancel={this.handleCancel} typePopPu="add"/>
          </Modal>
@@ -250,6 +235,7 @@ class Table1 extends React.Component {
                     <Modal visible={true}
                             closable ={false}
                             footer={null}
+                            title = "修改Qa"
                     >
                    <WrappedRegistrationForm strHtml={this.compileHtmls}  formdata = {t.state.getEditorData} ok={this.handleOk} cancel={this.handleCancel} typePopPu="edit"/>
 

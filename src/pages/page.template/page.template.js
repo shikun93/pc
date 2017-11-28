@@ -7,34 +7,16 @@ import ReactMixin from 'react-mixin';
 import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
-import { Table,Breadcrumb,Icon,Modal,Button, Form, Input, Tooltip,Select,message } from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button, Form, Input,Select } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-const cb =function(err){
-    message.error(err);
-}
-
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-    },
-};
-
 import './page.template.less';
-
-
-
 
 //修改/添加公用表单
 class AdminModuleForm extends React.Component {
     state = {
-        confirmDirty: false,
+       
     };
 
 
@@ -55,7 +37,7 @@ class AdminModuleForm extends React.Component {
 
         return (
             <Form>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                     {getFieldDecorator('layout_id', {
                         initialValue: t.props.typePopPu == "edit"?t.props.formdata["layout_id"]:"",
                     })(
@@ -89,7 +71,7 @@ class AdminModuleForm extends React.Component {
                     <Select>
                         {
                             t.props.formdata['style_list'].map(function(item,index){
-                                return <Option value={item.layout_style_name}>{item.layout_style_name}</Option>;
+                                return <Option key={index} value={item.layout_style_name}>{item.layout_style_name}</Option>;
                             })
                         } 
                     </Select>
@@ -98,7 +80,8 @@ class AdminModuleForm extends React.Component {
             }
             <FormItem
                     {...formItemLayout}
-                    label="版面描述">
+                    label="版面描述"
+                    hasFeedback>
                         {getFieldDecorator('layout_desc', {
                             initialValue: t.props.typePopPu == "edit"?t.props.formdata["layout_desc"]:"",
                             rules: [{ required: true, message: 'Please select your layout_desc!' }],
@@ -108,7 +91,8 @@ class AdminModuleForm extends React.Component {
             </FormItem>
             <FormItem
                     {...formItemLayout}
-                    label="排序">
+                    label="排序"
+                    hasFeedback>
                         {getFieldDecorator('sort_order', {
                             initialValue: t.props.typePopPu == "edit"?t.props.formdata["sort_order"]:"",
                             rules: [{ required: true, message: 'Please select your sort_order!' }],
@@ -147,7 +131,7 @@ class PageTemplate extends React.Component {
     componentDidMount(){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getAdminModuleList(obj,1,cb);
+        Actions.getAdminModuleList(obj,1);
     }
     //取消
     handleCancel(){
@@ -160,7 +144,7 @@ class PageTemplate extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorSuccess(obj,values,Actions,t.state.current,cb);
+                Actions.editorSuccess(obj,values,Actions,t.state.current);
             }
         });
     }
@@ -171,7 +155,7 @@ class PageTemplate extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addPageTemplate(obj,values,Actions,cb);
+                Actions.addPageTemplate(obj,values,Actions);
             }
         });
     }
@@ -185,13 +169,13 @@ class PageTemplate extends React.Component {
     //修改
     amend(id){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getEditorAdminModule(obj,id,cb);
+        Actions.getEditorAdminModule(obj,id);
     }
 
     //分页
     onChange(page){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getAdminModuleList(obj,page,cb);
+        Actions.getAdminModuleList(obj,page);
     }
 
     //添加
@@ -204,7 +188,8 @@ class PageTemplate extends React.Component {
         return t.state.addVisible?<div>
         <Modal visible={true}
                 closable ={false}
-                footer={null}>
+                footer={null}
+                title="添加模板">
             <AdminModulesForm  ok={this.addOk} cancel={this.handleCancel} adminGroupList = {t.state.adminGroupList}/>
             </Modal>
             </div>:"";
@@ -216,6 +201,7 @@ class PageTemplate extends React.Component {
         <Modal visible={true}
         closable ={false}
         footer={null}
+        title="修改模板"
             >
             <AdminModulesForm adminGroupList = {t.state.adminGroupList}
                             formdata = {t.state.editorOne}

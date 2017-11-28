@@ -15,9 +15,6 @@ class Carousels extends React.Component{
 
         };
     }
-    componentDidMount(){
-        let t = this;
-    }
 
     show(e){
        $(e.currentTarget).find(".actions").addClass("show1");
@@ -33,7 +30,7 @@ class Carousels extends React.Component{
                     <Carousel autoplay className="carstyle">
                     {
                         t.props.data["arr"].map(function(item,index){
-                        return  <div className="car_item"><h5>{item.title}</h5><a href = {item.rootUrl} target="_blank"><img  className="typewidth" src={item.imageUrl} alt=""/></a></div>;
+                        return  <div key={index} className="car_item"><h5>{item.title}</h5><a href = {item.rootUrl} target="_blank"><img  className="typewidth" src={item.imageUrl} alt=""/></a></div>;
                     })
                     }
                     </Carousel>

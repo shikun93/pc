@@ -7,7 +7,7 @@ import ReactMixin from 'react-mixin';
 import {Link} from 'react-router';
 import Actions from './action';
 import Store from './store';
-import { Table,Breadcrumb,Icon,Modal,Button, Form, Input, Tooltip,Carousel,Upload,Radio,message,Row,Col } from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button, Form, Input,Upload,Radio,Row,Col } from 'antd';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 import {urlhttp,urlhttps} from '../../app/url';
@@ -62,17 +62,12 @@ const formItemLayout1 = {
     },
 };
 
-const cb =function(err){
-    message.error(err);
-}
-
-
 let removeModul,recviseModul,loseModul,upperModul,downModul;
 
 const actionModuol = function(data){
         let token = sessionStorage.getItem("admin_token");
         removeModul = function(){
-            Actions.removeModul(token,data["layout_special_item_id"],Actions,cb);
+            Actions.removeModul(token,data["layout_special_item_id"],Actions);
         };
         loseModul = function(check){
             let n;
@@ -81,13 +76,13 @@ const actionModuol = function(data){
             }else{
                 n=0;
             }
-            Actions.loseModul(token,data["layout_special_item_id"],n,Actions,cb);
+            Actions.loseModul(token,data["layout_special_item_id"],n,Actions);
         };
         upperModul = function(){
-            Actions.orderModul(token,data["layout_special_item_id"],"upper",Actions,cb);
+            Actions.orderModul(token,data["layout_special_item_id"],"upper",Actions);
         };
         downModul = function(){
-            Actions.orderModul(token,data["layout_special_item_id"],"down",Actions,cb);
+            Actions.orderModul(token,data["layout_special_item_id"],"down",Actions);
         };
 }
 
@@ -204,16 +199,17 @@ render() {
             onOk={onCreate.bind(t)}
             wrapClassName="show_model"
             width="1200px"
+            title = {t.props.typePopPu == "edit"?"修改模块":"添加模块"}
             >
             <Form>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('layout_special_item_id', {
                     initialValue: t.props.typePopPu == "edit"?t.props.formdata["layout_special_item_id"]:"",
                 })(
                 <Input  style={{"display":"none"}}/>
                 )}
             </FormItem>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('item_type', {
                     initialValue: "a",
                 })(
@@ -554,7 +550,7 @@ render() {
         let arrhtml = [];
          for(let i=1;i<=n;i++){
             arrhtml.push(
-                <Col span={24/n}>
+                <Col span={24/n} key={i}>
                 <FormItem
                         {...formItemLayout}
                         label={"标题"+i}
@@ -619,16 +615,17 @@ render() {
             wrapClassName="show_model"
             onOk={this.props.ok.bind(this)}
             width={n!=1?250*n+'px':"500px"}
+            title = {t.props.typePopPu == "edit"?"修改模块":"添加模块"}
             >
             <Form>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('layout_special_item_id', {
                     initialValue: t.props.typePopPu == "edit"?t.props.formdata["layout_special_item_id"]:"",
                 })(
                 <Input  style={{"display":"none"}}/>
                 )}
             </FormItem>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('item_type', {
                     initialValue: "b",
                 })(
@@ -757,23 +754,24 @@ render() {
             wrapClassName="show_model"
             onOk={this.props.ok.bind(this)}
             width='750px'
+            title = {t.props.typePopPu == "edit"?"修改模块":"添加模块"}
             >
             <Form>
-                 <FormItem {...formItemLayout}>
+                 <FormItem style={{margin:0}}>
                     {getFieldDecorator('layout_special_item_id', {
                         initialValue: t.props.typePopPu == "edit"?t.props.formdata["layout_special_item_id"]:"",
                     })(
                     <Input  style={{"display":"none"}}/>
                     )}
                 </FormItem>
-                <FormItem {...formItemLayout}>
+                <FormItem style={{margin:0}}>
                     {getFieldDecorator('item_type', {
                         initialValue: "c",
                     })(
                     <Input  style={{"display":"none"}}/>
                     )}
                 </FormItem>
-                <FormItem {...formItemLayout}>
+                <FormItem style={{margin:0}}>
                     {getFieldDecorator('fmodul_type', {
                         initialValue: t.props.formdata["fmodul_type"],
                     })(
@@ -929,23 +927,24 @@ render() {
             wrapClassName="show_model"
             closable ={false}
             onOk={this.props.ok.bind(this)}
+            title = {t.props.typePopPu == "edit"?"修改模块":"添加模块"}
             >
             <Form>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('layout_special_item_id', {
                     initialValue: t.props.typePopPu == "edit"?t.props.formdata["layout_special_item_id"]:"",
                 })(
                 <Input  style={{"display":"none"}}/>
                 )}
             </FormItem>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('titleImg_type', {
                     initialValue: t.props.formdata["fmodul_type"],
                 })(
                 <Input  style={{"display":"none"}}/>
                 )}
             </FormItem>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('item_type', {
                     initialValue: "d",
                 })(
@@ -1065,16 +1064,17 @@ class CustomForm extends React.Component {
             wrapClassName="show_model"
             closable ={false}
             onOk={this.props.ok.bind(this)}
+            title = {t.props.typePopPu == "edit"?"修改模块":"添加模块"}
             >
             <Form>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('layout_special_item_id', {
                     initialValue: t.props.typePopPu == "edit"?t.props.formdata["layout_special_item_id"]:""
                 })(
                 <Input  style={{"display":"none"}}/>
                 )}
             </FormItem>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('item_type', {
                     initialValue: "e",
                 })(
@@ -1146,7 +1146,7 @@ class SpecialModule extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         let id = t.props.location.query.id;
         sessionStorage.setItem("specialId",id); 
-        Actions.getAllItem(obj,id,t.aType,t.bType,t.cType,t.dType,t.eType,cb);
+        Actions.getAllItem(obj,id,t.aType,t.bType,t.cType,t.dType,t.eType);
         
     }
 
@@ -1156,7 +1156,7 @@ class SpecialModule extends React.Component {
             let obj = sessionStorage.getItem("admin_token");
             let id = t.props.location.query.id;
             sessionStorage.setItem("specialId",id);
-            Actions.getAllItem(obj,id,t.aType,t.bType,t.cType,t.dType,t.eType,cb);
+            Actions.getAllItem(obj,id,t.aType,t.bType,t.cType,t.dType,t.eType);
             Actions.updatebol();
         }
     }
@@ -1188,19 +1188,19 @@ class SpecialModule extends React.Component {
             if(err==null){
                 switch(values["item_type"]){
                     case "a":
-                        Actions.setCarousel(obj,values,id,Actions,cb);
+                        Actions.setCarousel(obj,values,id,Actions);
                         break;
                     case "b":
-                        Actions.addFlex(obj,values,id,Actions,cb);
+                        Actions.addFlex(obj,values,id,Actions);
                         break;
                     case "c":
-                        Actions.addFmodul(obj,values,id,Actions,cb);
+                        Actions.addFmodul(obj,values,id,Actions);
                         break;
                     case "d":
-                        Actions.addTitleImg(obj,values,id,Actions,cb);
+                        Actions.addTitleImg(obj,values,id,Actions);
                         break; 
                     case "e":
-                        Actions.addHtml(obj,values,id,Actions,cb); 
+                        Actions.addHtml(obj,values,id,Actions); 
                         break;  
                 }   
             }
@@ -1256,19 +1256,19 @@ class SpecialModule extends React.Component {
             if(err==null){
                 switch(values["item_type"]){
                     case "a":
-                        Actions.editCarousel(obj,values,Actions,cb);
+                        Actions.editCarousel(obj,values,Actions);
                         break;
                     case "b":
-                        Actions.editFlex(obj,values,Actions,cb);
+                        Actions.editFlex(obj,values,Actions);
                         break;
                     case "c":
-                        Actions.editFmodul(obj,values,Actions,cb);
+                        Actions.editFmodul(obj,values,Actions);
                         break;
                     case "d":
-                        Actions.editTitleImg(obj,values,Actions,cb);
+                        Actions.editTitleImg(obj,values,Actions);
                         break;   
                     case "e":
-                        Actions.editorHtml(obj,values,Actions,cb);
+                        Actions.editorHtml(obj,values,Actions);
                         break;  
                 }   
             }
@@ -1308,45 +1308,45 @@ class SpecialModule extends React.Component {
         let t = this;
         actionModuol(data);
          let recviseModul = function(e){
-            Actions.recviseCarouse(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"),cb);
+            Actions.recviseCarouse(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"));
         }
-        arrHtml.push(<Carousels data={data} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
+        arrHtml.push(<Carousels key={arrHtml.length} data={data} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
     }
 
     bType(data,arrHtml){
         let t = this;
         actionModuol(data);
         let recviseModul = function(e){
-            Actions.recviseFlex(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"),cb);
+            Actions.recviseFlex(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"));
         }
-        arrHtml.push(<Flex arrData={data} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
+        arrHtml.push(<Flex key={arrHtml.length} arrData={data} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
     }
 
     cType(data,n,arrHtml){
         let t = this;
         actionModuol(data);
          let recviseModul = function(e){
-            Actions.recviseFmodul(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"),cb);
+            Actions.recviseFmodul(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"));
         }
-        arrHtml.push(<Fmodul fData={data} n={n} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
+        arrHtml.push(<Fmodul key={arrHtml.length} fData={data} n={n} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
     }
 
     dType(data,n,arrHtml){
         let t = this;
         actionModuol(data);
         let recviseModul = function(e){
-            Actions.recviseTitleImg(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"),cb);
+            Actions.recviseTitleImg(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"));
         }
-        arrHtml.push(<TitleImage data={data} n={n} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
+        arrHtml.push(<TitleImage key={arrHtml.length} data={data} n={n} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
     }
 
     eType(data,arrHtml){
         let t = this;
         actionModuol(data);
         let recviseModul = function(e){
-            Actions.recviseCustom(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"),cb);
+            Actions.recviseCustom(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"));
         }
-        arrHtml.push(<Custom data={data} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
+        arrHtml.push(<Custom key={arrHtml.length} data={data} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
     }
 
     render() {

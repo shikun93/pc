@@ -31,7 +31,7 @@ var Store =  Reflux.createStore({
     updateComponent: function() {
         this.trigger(this.data);
     },
-    onGetPrinterSeller:function(token,page,cb){
+    onGetPrinterSeller:function(token,page){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -44,7 +44,7 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
             if(result.error == ""){
-                t.data.list = result.data['printer_seller_list'];
+                t.data.list = addKeyFun(result.data['printer_seller_list']);
                 t.data.total = result.ext['total_num'];
                 t.data.current =parseInt(page);
                 t.updateComponent();  
@@ -61,7 +61,7 @@ var Store =  Reflux.createStore({
         t.data.addVisible = true;
         t.updateComponent();  
     },
-    onEditShow:function(token,id,cb){
+    onEditShow:function(token,id){
         let t = this;
        
         let obj = qs.stringify({
@@ -92,7 +92,7 @@ var Store =  Reflux.createStore({
          t.data.editVisible = false;
         t.updateComponent();  
     },
-    onAddPrinterSeller:function(token,values,Actions,cb,current){
+    onAddPrinterSeller:function(token,values,Actions,current){
         let t = this;
         let obj = {};
         obj.admin_token = token;
@@ -109,7 +109,7 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
             if(result.error == ""){
-                Actions.getPrinterSeller(token,current,cb);
+                Actions.getPrinterSeller(token,current);
                 t.data.addVisible = false;
                 t.updateComponent();  
             }else{
@@ -118,7 +118,7 @@ var Store =  Reflux.createStore({
           
         });
     },
-    onEditPrinterSeller:function(token,values,Actions,cb,current){
+    onEditPrinterSeller:function(token,values,Actions,current){
         let t = this;
         let obj = {};
         obj.admin_token = token;
@@ -134,7 +134,7 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
             if(result.error == ""){
-                Actions.getPrinterSeller(token,current,cb);
+                Actions.getPrinterSeller(token,current);
                 t.data.editVisible = false;
                 t.updateComponent();  
             }else{

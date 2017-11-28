@@ -8,20 +8,16 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Table,Breadcrumb,Icon,Modal,Button, Form, Input,message,Select } from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button, Form, Input,Select } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 import './shop.spec.less';
-
-const cb =function(err){
-    message.error(err);
-}
 
 
 //修改/添加公用表单
 class ShopSpecForm extends React.Component {
     state = {
-        bol: false,
+        
     }; 
     render() {
 
@@ -42,7 +38,7 @@ class ShopSpecForm extends React.Component {
         return (
             <Form>
             <FormItem
-        {...formItemLayout}
+            style={{margin:0}}
     >
         {getFieldDecorator('goods_spec_id', {
             initialValue: t.props.typePopPu == "edit"?t.props.formdata["goods_spec_id"]:"",
@@ -78,7 +74,7 @@ class ShopSpecForm extends React.Component {
         <Select>
                {
                     t.props.selectList.map(function(item,index){
-                        return <Option value={item['goods_class_name']}>{item['goods_class_name']}</Option>;
+                        return <Option key={index} value={item['goods_class_name']}>{item['goods_class_name']}</Option>;
                     })
                 }
         </Select>
@@ -100,7 +96,7 @@ class ShopSpecForm extends React.Component {
         <FormItem>
             <Button key="back" size="large" onClick={this.props.cancel}>取消</Button>,
             <Button key="submit" type="primary" size="large"  onClick={this.props.ok.bind(this)}>
-                确认
+                <span style={{color:"#fff"}}>确认</span>
             </Button>
         </FormItem>
         </Form>
@@ -125,7 +121,7 @@ class Brand extends React.Component {
     componentDidMount(){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getList(obj,1,cb,0);
+        Actions.getList(obj,1,0);
         Actions.getSelectList(obj);
     }
     //取消
@@ -139,7 +135,7 @@ class Brand extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorSuccess(obj,values,Actions, t.state.current,cb);
+                Actions.editorSuccess(obj,values,Actions, t.state.current);
             }
         });
 
@@ -151,7 +147,7 @@ class Brand extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addList(obj,values,Actions,cb);
+                Actions.addList(obj,values,Actions);
             }
         });
     }
@@ -161,19 +157,19 @@ class Brand extends React.Component {
         console.log(id);
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.remove(obj,id,Actions,t.state.current,cb);
+        Actions.remove(obj,id,Actions,t.state.current);
     }
 
     //修改
     amend(id){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.editorList(obj,id,cb);
+        Actions.editorList(obj,id);
     }
 
     //分页
     onChange(page){
         let token = sessionStorage.getItem("admin_token");
-        Actions.getBrandList(token,page,cb);
+        Actions.getBrandList(token,page);
     }
 
     //添加
@@ -196,6 +192,7 @@ class Brand extends React.Component {
         <Modal visible={true}
         closable ={false}
         footer={null}
+        title = "添加商品规格"
             >
             <ShopSpecsForm     selectList = {t.state.selectList}
                             ok={this.addOk}
@@ -207,7 +204,11 @@ class Brand extends React.Component {
     onpopup(){
         let t = this;
         return t.state.visible?<div>
-        <Modal visible={true} closable ={false} footer={null}>
+        <Modal 
+        visible={true} 
+        closable ={false} 
+        footer={null}
+        title = "修改商品规格">
             <ShopSpecsForm  selectList = {t.state.selectList}
                             formdata = {t.state.editorAdminData}
                             ok={this.handleOk}

@@ -91,7 +91,7 @@ var Store =  Reflux.createStore({
         t.data.editorHtml = "";
         t.updateComponent();
     },
-    onRemoveModul:function(token,id,Actions,cb){
+    onRemoveModul:function(token,id,Actions){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -113,7 +113,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onLoseModul:function(token,id,bol,Actions,cb){
+    onLoseModul:function(token,id,bol,Actions){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -137,7 +137,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onOrderModul:function(token,id,mode,Actions,cb){
+    onOrderModul:function(token,id,mode,Actions){
         let t = this;
         let arr =[];
         let list = sessionStorage.getItem("list_order").split(",");
@@ -167,7 +167,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onSetCarousel:function(token,values,id,Actions,cb){
+    onSetCarousel:function(token,values,id,Actions){
         let t = this;
         let obj = {};
         obj.admin_token = token;
@@ -201,7 +201,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditCarousel:function(token,values,Actions,cb){
+    onEditCarousel:function(token,values,Actions){
         let t = this;
         let obj ={};
         obj.admin_token = token;
@@ -240,7 +240,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onAddFlex:function(token,values,id,Actions,cb){
+    onAddFlex:function(token,values,id,Actions){
         let t = this;
         let num = sessionStorage.getItem("num");
         let obj = {};
@@ -275,7 +275,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditFlex:function(token,values,Actions,cb){
+    onEditFlex:function(token,values,Actions){
         let t = this;
         let num = sessionStorage.getItem("num");
         let obj = {};
@@ -315,7 +315,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-     onAddFmodul:function(token,values,id,Actions,cb){
+     onAddFmodul:function(token,values,id,Actions){
         let t = this;
         let obj = {};
         obj.admin_token = token;
@@ -347,7 +347,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditFmodul:function(token,values,Actions,cb){
+    onEditFmodul:function(token,values,Actions){
         let t = this;
         let obj = {};
         obj.admin_token = token;
@@ -384,7 +384,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-     onAddTitleImg:function(token,values,id,Actions,cb){
+     onAddTitleImg:function(token,values,id,Actions){
         let t = this;
         let obj = {};
         let img =values.upload[0];
@@ -416,7 +416,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditTitleImg:function(token,values,Actions,cb){
+    onEditTitleImg:function(token,values,Actions){
         let t = this;
         let obj = {};
         let img =values.upload[0];
@@ -449,7 +449,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onRecviseFlex:function(token,id,cb){
+    onRecviseFlex:function(token,id){
         let t = this;
         let i=1,imgObj = [];
         let obj = qs.stringify({
@@ -493,7 +493,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-     onRecviseCarouse:function(token,id,cb){
+     onRecviseCarouse:function(token,id){
         let t = this;
         let i=1;
         let obj = qs.stringify({
@@ -536,7 +536,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onRecviseFmodul:function(token,id,cb){
+    onRecviseFmodul:function(token,id){
         let t = this;
         let i=1,imgObj = [];
         let obj = qs.stringify({
@@ -579,7 +579,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onRecviseTitleImg:function(token,id,cb){
+    onRecviseTitleImg:function(token,id){
         let t = this;
         let i=1,imgObj = [];
         let obj = qs.stringify({
@@ -618,7 +618,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onRecviseCustom:function(token,id,cb){
+    onRecviseCustom:function(token,id){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -643,7 +643,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onGetAllItem:function(token,id,aType,bType,cType,dType,eType,cb){
+    onGetAllItem:function(token,id,aType,bType,cType,dType,eType){
         let t = this;
         let list = [],arrHtml=[];
         let obj = qs.stringify({
@@ -728,7 +728,7 @@ var Store =  Reflux.createStore({
         t.data.editorHtml = html;
         t.updateComponent();
     },
-    onAddHtml(token,values,id,Actions,cb){
+    onAddHtml(token,values,id,Actions){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -755,7 +755,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditorHtml:function(token,values,Actions,cb){
+    onEditorHtml:function(token,values,Actions){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,

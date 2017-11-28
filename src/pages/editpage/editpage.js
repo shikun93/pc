@@ -7,7 +7,7 @@ import ReactMixin from 'react-mixin';
 import {Link} from 'react-router';
 import Actions from './action';
 import Store from './store';
-import { Table,Breadcrumb,Icon,Modal,Button, Form, Input, Tooltip,Carousel,Upload,Radio,message } from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button, Form, Input,Upload,Radio } from 'antd';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 import {urlhttp,urlhttps} from '../../app/url';
@@ -37,17 +37,12 @@ const formItemLayout = {
     },
 };
 
-const cb =function(err){
-    message.error(err);
-}
-
-
 let removeModul,recviseModul,loseModul,upperModul,downModul;
 
 const actionModuol = function(data){
         let token = sessionStorage.getItem("admin_token");
         removeModul = function(){
-            Actions.removeModul(token,data["mobile_special_item_id"],Actions,cb);
+            Actions.removeModul(token,data["mobile_special_item_id"],Actions);
         };
         loseModul = function(check){
             let n;
@@ -56,13 +51,13 @@ const actionModuol = function(data){
             }else{
                 n=0;
             }
-            Actions.loseModul(token,data["mobile_special_item_id"],n,Actions,cb);
+            Actions.loseModul(token,data["mobile_special_item_id"],n,Actions);
         };
         upperModul = function(){
-            Actions.orderModul(token,data["mobile_special_item_id"],"upper",Actions,cb);
+            Actions.orderModul(token,data["mobile_special_item_id"],"upper",Actions);
         };
         downModul = function(){
-            Actions.orderModul(token,data["mobile_special_item_id"],"down",Actions,cb);
+            Actions.orderModul(token,data["mobile_special_item_id"],"down",Actions);
         };
 }
 
@@ -85,14 +80,14 @@ render() {
         const { getFieldDecorator } = this.props.form;
         return (
             <Form>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('mobile_special_item_id', {
                     initialValue: t.props.typePopPu == "edit"?t.props.formdata["mobile_special_item_id"]:"",
                 })(
                 <Input  style={{"display":"none"}}/>
                 )}
             </FormItem>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('item_type', {
                     initialValue: "a",
                 })(
@@ -304,14 +299,14 @@ render() {
                 }
         return (
             <Form>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('mobile_special_item_id', {
                     initialValue: t.props.typePopPu == "edit"?t.props.formdata["mobile_special_item_id"]:"",
                 })(
                 <Input  style={{"display":"none"}}/>
                 )}
             </FormItem>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('item_type', {
                     initialValue: "b",
                 })(
@@ -382,21 +377,21 @@ render() {
         const { getFieldDecorator } = this.props.form;
         return (
             <Form>
-             <FormItem {...formItemLayout}>
+             <FormItem style={{margin:0}}>
                 {getFieldDecorator('mobile_special_item_id', {
                     initialValue: t.props.typePopPu == "edit"?t.props.formdata["mobile_special_item_id"]:"",
                 })(
                 <Input  style={{"display":"none"}}/>
                 )}
             </FormItem>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('item_type', {
                     initialValue: "c",
                 })(
                 <Input  style={{"display":"none"}}/>
                 )}
             </FormItem>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('fmodul_type', {
                     initialValue: t.props.formdata["fmodul_type"],
                 })(
@@ -499,21 +494,21 @@ render() {
         const { getFieldDecorator } = this.props.form;
         return (
             <Form>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('mobile_special_item_id', {
                     initialValue: t.props.typePopPu == "edit"?t.props.formdata["mobile_special_item_id"]:"",
                 })(
                 <Input  style={{"display":"none"}}/>
                 )}
             </FormItem>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('titleImg_type', {
                     initialValue: t.props.formdata["fmodul_type"],
                 })(
                 <Input  style={{"display":"none"}}/>
                 )}
             </FormItem>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('item_type', {
                     initialValue: "d",
                 })(
@@ -615,7 +610,7 @@ class EditPage extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         let id = t.props.location.query.id;
         sessionStorage.setItem("page_id",id); 
-        Actions.getAllItem(obj,id,t.aType,t.bType,t.cType,t.dType,cb);
+        Actions.getAllItem(obj,id,t.aType,t.bType,t.cType,t.dType);
     }
 
     componentDidUpdate(){
@@ -624,7 +619,7 @@ class EditPage extends React.Component {
             let obj = sessionStorage.getItem("admin_token");
             let id = t.props.location.query.id;
             sessionStorage.setItem("page_id",id);
-            Actions.getAllItem(obj,id,t.aType,t.bType,t.cType,t.dType,cb);
+            Actions.getAllItem(obj,id,t.aType,t.bType,t.cType,t.dType);
             Actions.updatebol();
         }
     }
@@ -656,16 +651,16 @@ class EditPage extends React.Component {
             if(err==null){
                 switch(values["item_type"]){
                     case "a":
-                        Actions.setCarousel(obj,values,sessionStorage.getItem("page_id"),Actions,cb);
+                        Actions.setCarousel(obj,values,sessionStorage.getItem("page_id"),Actions);
                         break;
                     case "b":
-                        Actions.addFlex(obj,values,sessionStorage.getItem("page_id"),Actions,cb);
+                        Actions.addFlex(obj,values,sessionStorage.getItem("page_id"),Actions);
                         break;
                     case "c":
-                        Actions.addFmodul(obj,values,sessionStorage.getItem("page_id"),Actions,cb);
+                        Actions.addFmodul(obj,values,sessionStorage.getItem("page_id"),Actions);
                         break;
                     case "d":
-                        Actions.addTitleImg(obj,values,sessionStorage.getItem("page_id"),Actions,cb);
+                        Actions.addTitleImg(obj,values,sessionStorage.getItem("page_id"),Actions);
                         break;   
                 }   
             }
@@ -725,16 +720,16 @@ class EditPage extends React.Component {
             if(err==null){
                 switch(values["item_type"]){
                     case "a":
-                        Actions.editCarousel(obj,values,Actions,cb);
+                        Actions.editCarousel(obj,values,Actions);
                         break;
                     case "b":
-                        Actions.editFlex(obj,values,Actions,cb);
+                        Actions.editFlex(obj,values,Actions);
                         break;
                     case "c":
-                        Actions.editFmodul(obj,values,Actions,cb);
+                        Actions.editFmodul(obj,values,Actions);
                         break;
                     case "d":
-                        Actions.editTitleImg(obj,values,Actions,cb);
+                        Actions.editTitleImg(obj,values,Actions);
                         break;   
                 }   
             }
@@ -787,36 +782,36 @@ class EditPage extends React.Component {
         actionModuol(data);
          let recviseModul = function(e){
             console.log(e.target.getAttribute("data-key"));
-            Actions.recviseCarouse(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"),cb);
+            Actions.recviseCarouse(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"));
         }
-        arrHtml.push(<Carousels data={data} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
+        arrHtml.push(<Carousels key={arrhtml.length} data={data} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
     }
 
     bType(data,arrHtml){
         let t = this;
         actionModuol(data);
         let recviseModul = function(e){
-            Actions.recviseFlex(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"),cb);
+            Actions.recviseFlex(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"));
         }
-        arrHtml.push(<Flex arrData={data} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
+        arrHtml.push(<Flex key={arrhtml.length} arrData={data} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
     }
 
     cType(data,n,arrHtml){
         let t = this;
         actionModuol(data);
          let recviseModul = function(e){
-            Actions.recviseFmodul(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"),cb);
+            Actions.recviseFmodul(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"));
         }
-        arrHtml.push(<Fmodul fData={data} n={n} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
+        arrHtml.push(<Fmodul key={arrhtml.length} fData={data} n={n} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
     }
 
     dType(data,n,arrHtml){
         let t = this;
         actionModuol(data);
         let recviseModul = function(e){
-            Actions.recviseTitleImg(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"),cb);
+            Actions.recviseTitleImg(sessionStorage.getItem("admin_token"),e.target.getAttribute("data-key"));
         }
-        arrHtml.push(<TitleImage data={data} n={n} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
+        arrHtml.push(<TitleImage key={arrhtml.length} data={data} n={n} recvise={recviseModul} remove={removeModul} lose={loseModul} upper={upperModul} down={downModul}/>);
     }
 
     render() {

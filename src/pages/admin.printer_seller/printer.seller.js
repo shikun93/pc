@@ -8,32 +8,15 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import Editors from '../../components/editor/editor';
-import { Table,Breadcrumb,Icon,Modal,Button, Form, Input, Tooltip, Cascader, Select, Row, Col, Checkbox,Radio,message } from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button, Form, Input,Radio } from 'antd';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-    },
-};
-
 import './printer.seller.less';
-
-const cb =function(err){
-    message.error(err);
-}
-
 
 //修改/添加公用表单
 class PrinterSellerForm extends React.Component {
     state = {
-        confirmDirty: false,
     };
 
     render() {
@@ -52,7 +35,7 @@ class PrinterSellerForm extends React.Component {
         return (
             <Form>
             <FormItem
-                    {...formItemLayout}
+                    style={{margin:0}}
                     >
                     {getFieldDecorator('printer_seller_id', {
                          initialValue: t.props.typePopPu == "edit"?t.props.formdata["printer_seller_id"]:"",
@@ -99,8 +82,7 @@ class PrinterSellerForm extends React.Component {
                     hasFeedback
                     >
                     {getFieldDecorator('c_downr_title', {
-                        initialValue: t.props.typePopPu == "edit"?t.props.formdata['init_setting']['customer_service']['downr_title']:"",
-                        rules: [{ required: true }],
+                        initialValue: t.props.typePopPu == "edit"?t.props.formdata['init_setting']['customer_service']['downr_title']:""
                     })(
                     <Input />
                 )}
@@ -207,8 +189,8 @@ class PrinterSellerForm extends React.Component {
                 <FormItem>
                     <Button key="back" size="large" onClick={this.props.cancel}>取消</Button>,
                     <Button key="submit" type="primary" size="large"  onClick={this.props.ok.bind(this)}>
-                        确认
-                        </Button>
+                        <span style={{color:"#fff"}}>确认</span>
+                    </Button>
             </FormItem>
         </Form>
     );
@@ -235,7 +217,7 @@ class Table1 extends React.Component {
     componentDidMount(){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getPrinterSeller(obj,1,cb);
+        Actions.getPrinterSeller(obj,1);
     }
    
    add (){
@@ -247,7 +229,7 @@ class Table1 extends React.Component {
         let current = sessionStorage.getItem("pspage");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addPrinterSeller(obj,values,Actions,cb,current);
+                Actions.addPrinterSeller(obj,values,Actions,current);
             }
         });
    }
@@ -261,7 +243,8 @@ class Table1 extends React.Component {
         return t.state.addVisible?<div>
         <Modal visible={true}
             closable ={false}
-            footer={null}>
+            footer={null}
+            title="添加销售商">
             <PrinterSellersForm ok={this.addOk} cancel={this.handleCancel}/>
         </Modal>
         </div>:"";
@@ -270,7 +253,7 @@ class Table1 extends React.Component {
    edit(id){
         let t = this;
         let token = sessionStorage.getItem("admin_token");
-        Actions.editShow(token,id,cb);
+        Actions.editShow(token,id);
    }
 
    editOk(){
@@ -279,7 +262,7 @@ class Table1 extends React.Component {
         let current = sessionStorage.getItem("pspage");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editPrinterSeller(token,values,Actions,cb,current);
+                Actions.editPrinterSeller(token,values,Actions,current);
             }
         });
    }
@@ -289,7 +272,8 @@ class Table1 extends React.Component {
         return t.state.editVisible?<div>
         <Modal visible={true}
             closable ={false}
-            footer={null}>
+            footer={null}
+            title="修改销售商">
             <PrinterSellersForm ok={this.editOk} cancel={this.handleCancel} formdata={t.state.getOneList} typePopPu="edit"/>
         </Modal>
         </div>:"";
@@ -298,7 +282,7 @@ class Table1 extends React.Component {
    onChange(page){
         let token = sessionStorage.getItem("admin_token");
         sessionStorage.setItem("pspage",page);
-        Actions.getPrinterSeller(token,page,cb);
+        Actions.getPrinterSeller(token,page);
    }
 
     render() {

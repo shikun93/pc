@@ -5,14 +5,9 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Breadcrumb,message,Button,Table,Modal} from 'antd';
+import { Breadcrumb,Button,Table,Modal} from 'antd';
 import OrderDetails from '../../components/order.details/order.details';
 import './shop.order.less';
-
-
-const cb =function(err){
-    message.error(err);
-}
 
 //组件类
 class ShopOrder extends React.Component {
@@ -22,23 +17,20 @@ class ShopOrder extends React.Component {
             
         };
     }
-    componentWillMount(){
-      
-    }
     componentDidMount(){
         let t = this;
         let token = sessionStorage.getItem("admin_token");
-        Actions.getList(token,1,cb);
+        Actions.getList(token,1);
     }  
 
     findLook(id){
         let token = sessionStorage.getItem("admin_token");
-        Actions.findLook(token,id,cb);
+        Actions.findLook(token,id);
     } 
 
     cancelOrder(id){
         let token = sessionStorage.getItem("admin_token");
-        Actions.cancelOrder(token,id,Actions,cb);
+        Actions.cancelOrder(token,id,Actions);
     }
 
     cancel(){
@@ -59,7 +51,7 @@ class ShopOrder extends React.Component {
     }
 
     onChange(page){
-        Actions.getList(token,page,cb);
+        Actions.getList(token,page);
     }
     
     render() {

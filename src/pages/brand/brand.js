@@ -8,15 +8,11 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Table,Breadcrumb,Icon,Modal,Button, Form, Input, Tooltip,message,Select,Radio,Switch,Row, Col,Upload } from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button, Form, Input, Select,Radio,Row, Col,Upload } from 'antd';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
 import './brand.less';
-
-const cb =function(err){
-    message.error(err);
-}
 
 
 //修改/添加公用表单
@@ -32,7 +28,7 @@ class BrandForm extends React.Component {
     return e && e.fileList;
     }
 
-    showHtml = ()=>{
+    showHtml(){
         this.setState({bol:true});
     }
 
@@ -89,7 +85,7 @@ class BrandForm extends React.Component {
         return (
             <Form>
             <FormItem
-        {...formItemLayout}
+        style={{margin:0}}
     >
         {getFieldDecorator('brand_id', {
             initialValue: t.props.typePopPu == "edit"?t.props.formdata["brand_id"]:"",
@@ -139,7 +135,7 @@ class BrandForm extends React.Component {
                         <Select onChange={t.props.getCalList.bind(t,0)}>
                             {
                                 t.props.listOne.map(function(item,index){
-                                    return <Option value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
+                                    return <Option key={index} value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
                                 })
                             }
                         </Select>
@@ -158,7 +154,7 @@ class BrandForm extends React.Component {
                         <Select onChange={t.props.getCalList.bind(t,1)}>
                             {
                                 t.props.listTwo.map(function(item,index){
-                                    return <Option value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
+                                    return <Option key={index} value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
                                 })
                             }
                         </Select>
@@ -178,7 +174,7 @@ class BrandForm extends React.Component {
                         <Select>
                             {
                                 t.props.listThree.map(function(item,index){
-                                    return <Option value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
+                                    return <Option key={index} value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
                                 })
                             }
                         </Select>
@@ -200,7 +196,7 @@ class BrandForm extends React.Component {
             </Col>
             {!t.state.bol?<Col span={3}>
                 <FormItem>
-                     <Button onClick={this.showHtml}>编辑</Button>  
+                     <Button onClick={this.showHtml.bind(this)}>编辑</Button>  
                 </FormItem>
             </Col>:""
             }
@@ -215,7 +211,7 @@ class BrandForm extends React.Component {
                         <Select onChange={t.props.getCalList.bind(t,0)}>
                             {
                                 t.props.listOne.map(function(item,index){
-                                    return <Option value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
+                                    return <Option key={index} value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
                                 })
                             }
                         </Select>
@@ -234,7 +230,7 @@ class BrandForm extends React.Component {
                         <Select onChange={t.props.getCalList.bind(t,1)}>
                             {
                                 t.props.listTwo.map(function(item,index){
-                                    return <Option value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
+                                    return <Option key={index} value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
                                 })
                             }
                         </Select>
@@ -254,7 +250,7 @@ class BrandForm extends React.Component {
                         <Select>
                             {
                                 t.props.listThree.map(function(item,index){
-                                    return <Option value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
+                                    return <Option key={index} value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
                                 })
                             }
                         </Select>
@@ -332,10 +328,10 @@ class BrandForm extends React.Component {
              <Input / >
         )}
         </FormItem>
-        <FormItem>
+        <FormItem className="but">
             <Button key="back" size="large" onClick={this.props.cancel}>取消</Button>,
             <Button key="submit" type="primary" size="large"  onClick={this.props.ok.bind(this)}>
-                确认
+                <span style={{color:"#fff"}}>确认</span>
             </Button>
         </FormItem>
         </Form>
@@ -360,7 +356,7 @@ class Brand extends React.Component {
     componentDidMount(){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getBrandList(obj,1,cb);
+        Actions.getBrandList(obj,1);
         Actions.getCasListOne(obj);
     }
     //取消
@@ -374,7 +370,7 @@ class Brand extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorSuccess(obj,values,Actions, t.state.current,cb);
+                Actions.editorSuccess(obj,values,Actions, t.state.current);
             }
         });
 
@@ -386,7 +382,7 @@ class Brand extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addList(obj,values,Actions,cb);
+                Actions.addList(obj,values,Actions);
             }
         });
     }
@@ -401,13 +397,13 @@ class Brand extends React.Component {
     //修改
     amend(id){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.editorList(obj,id,cb);
+        Actions.editorList(obj,id);
     }
 
     //分页
     onChange(page){
         let token = sessionStorage.getItem("admin_token");
-        Actions.getBrandList(token,page,cb);
+        Actions.getBrandList(token,page);
     }
 
     //添加
@@ -430,6 +426,8 @@ class Brand extends React.Component {
         <Modal visible={true}
         closable ={false}
         footer={null}
+        title = "添加品牌"
+        wrapClassName = "brand_modal_style"
             >
             <BrandsForm     listOne={t.state['goods_class_list_one']}
                             listTwo={t.state['goods_class_list_two']}
@@ -446,7 +444,11 @@ class Brand extends React.Component {
     onpopup(){
         let t = this;
         return t.state.visible?<div>
-        <Modal visible={true} closable ={false} footer={null}>
+        <Modal visible={true} 
+        closable ={false} 
+        footer={null}
+        title = "修改品牌"
+        wrapClassName = "brand_modal_style">
             <BrandsForm     listOne={t.state['goods_class_list_one']}
                             listTwo={t.state['goods_class_list_two']}
                             listThree={t.state['goods_class_list_three']}

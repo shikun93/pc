@@ -45,7 +45,7 @@ class ShopTypeForm extends React.Component {
         return (
             <Form>
             <FormItem
-        {...formItemLayout}
+        style={{margin:0}}
     >
         {getFieldDecorator('goods_class_id', {
             initialValue: t.props.typePopPu == "edit"?t.props.formdata["goods_class_id"]:"",
@@ -170,7 +170,7 @@ class ShopTypeForm extends React.Component {
         <FormItem className="but">
             <Button key="back" size="large" onClick={this.props.cancel}>取消</Button>,
             <Button key="submit" type="primary" size="large"  onClick={this.props.ok.bind(this,this.props.id)}>
-                确认
+                <span style={{color:"#fff"}}>确认</span>
             </Button>
         </FormItem>
         </Form>

@@ -15,10 +15,6 @@ class Flex extends React.Component{
 
         };
     }
-    componentDidMount(){
-        let t = this;
-
-    }
 
     show(e){
         $(e.currentTarget).find(".actions").addClass("show1");
@@ -37,7 +33,7 @@ class Flex extends React.Component{
         <Row>
             {
                 t.props.arrData["arr"].map(function(item,index){
-                  return   <Col span={num}>
+                  return   <Col span={num} key={index}>
                                 <Card>
                                 <a href = {item.rootUrl} target="_blank">
                                 <div className="custom-image">

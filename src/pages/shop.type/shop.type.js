@@ -8,26 +8,22 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Table,Breadcrumb,Icon,Modal,Button, Form, Input,message,Select,Switch,Row, Col,Checkbox } from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button, Form, Input,Select,Row, Col,Checkbox } from 'antd';
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
 import './shop.type.less';
-
-const cb =function(err){
-    message.error(err);
-}
 
 let addi = 0,sxi = 0;
 let ops = [{label:'显示',value:'1'}];
 const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 6 },
+                sm: { span: 4 },
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 14 },
+                sm: { span: 10 },
             },
         };
 
@@ -62,6 +58,36 @@ const formItemLayout = {
                 sm: { span: 8 },
             },
         };
+        const formLayout3 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 16 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 5 },
+            },
+        };
+        const formLayout4 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        };
+        const formItemLayout1 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 18 },
+            },
+        }
 
 //修改/添加公用表单
 class ShopTypeForm extends React.Component {
@@ -145,19 +171,19 @@ class ShopTypeForm extends React.Component {
 
     render() {
         let t = this;
+
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form>
+            <Form className="shop_type_form">
             <FormItem
-        {...formItemLayout}
-    >
+        style={{margin:0}}>
         {getFieldDecorator('goods_type_id', {
             initialValue: t.props.typePopPu == "edit"?t.props.formdata["goods_type_id"]:"",
         })(
         <Input  style={{"display":"none"}}/>
         )}
     </FormItem>
-     <FormItem>
+     <FormItem style={{margin:0}}>
         {getFieldDecorator('goods_class_id', {
             initialValue: t.props.typePopPu == "edit"?t.props.formdata["goods_class_id"]:"",
             })(
@@ -180,7 +206,7 @@ class ShopTypeForm extends React.Component {
     </FormItem>
 
         {t.props.typePopPu != "edit"?<Row>
-            <Col span={12}>
+            <Col span={8}>
                 <FormItem
                     {...formLayout1}
                     label="快捷定位">
@@ -192,7 +218,7 @@ class ShopTypeForm extends React.Component {
                         <Select onChange={t.props.getCalList.bind(t,0)}>
                             {
                                 t.props.listOne.map(function(item,index){
-                                    return <Option value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
+                                    return <Option key={index} value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
                                 })
                             }
                         </Select>
@@ -200,7 +226,7 @@ class ShopTypeForm extends React.Component {
             </FormItem>
             </Col>
            {
-                t.props.listTwo.length?<Col span={6}>
+                t.props.listTwo.length?<Col span={4} offset={1}>
                 <FormItem
                     {...formLayout}>
                         {getFieldDecorator('goods_class_name2', {
@@ -211,7 +237,7 @@ class ShopTypeForm extends React.Component {
                         <Select onChange={t.props.getCalList.bind(t,1)}>
                             {
                                 t.props.listTwo.map(function(item,index){
-                                    return <Option value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
+                                    return <Option key={index} value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
                                 })
                             }
                         </Select>
@@ -220,7 +246,7 @@ class ShopTypeForm extends React.Component {
             </Col>:""
            }
            {
-                t.props.listThree.length?<Col span={6}>
+                t.props.listThree.length?<Col span={4} offset={1}>
                 <FormItem
                     {...formLayout}>
                         {getFieldDecorator('goods_class_name3', {
@@ -231,7 +257,7 @@ class ShopTypeForm extends React.Component {
                         <Select>
                             {
                                 t.props.listThree.map(function(item,index){
-                                    return <Option value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
+                                    return <Option key={index} value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
                                 })
                             }
                         </Select>
@@ -240,9 +266,9 @@ class ShopTypeForm extends React.Component {
             </Col>:""
            }
         </Row>:<Row>
-            <Col span={9}>
+            <Col span={8}>
                 <FormItem
-                    {...formLayout2}
+                    {...formLayout1}
                     label="快捷定位">
                         {getFieldDecorator('goods_class_name', {
                             initialValue: t.props.typePopPu == "edit"?t.props.formdata['goods_class_name']:"",
@@ -268,7 +294,7 @@ class ShopTypeForm extends React.Component {
                         <Select onChange={t.props.getCalList.bind(t,0)}>
                             {
                                 t.props.listOne.map(function(item,index){
-                                    return <Option value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
+                                    return <Option key={index} value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
                                 })
                             }
                         </Select>
@@ -287,7 +313,7 @@ class ShopTypeForm extends React.Component {
                         <Select onChange={t.props.getCalList.bind(t,1)}>
                             {
                                 t.props.listTwo.map(function(item,index){
-                                    return <Option value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
+                                    return <Option key={index} value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
                                 })
                             }
                         </Select>
@@ -307,7 +333,7 @@ class ShopTypeForm extends React.Component {
                         <Select>
                             {
                                 t.props.listThree.map(function(item,index){
-                                    return <Option value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
+                                    return <Option key={index} value={item['goods_class_id']+','+item['goods_class_name']}>{item['goods_class_name']}</Option>;
                                 })
                             }
                         </Select>
@@ -335,16 +361,16 @@ class ShopTypeForm extends React.Component {
             {...formItemLayout}
             label="选择关联规格">
               {getFieldDecorator('goods_spec_id', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["goods_spec_id"]:"",
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata["goods_spec_id"]:[],
             })(
             <CheckboxGroup options={t.props.specList}/>
         )}     
         </FormItem>
         <FormItem
-            {...formItemLayout}
+            {...formItemLayout1}
             label="选择关联品牌">
               {getFieldDecorator('brand_id', {
-                initialValue: t.props.typePopPu == "edit"?t.props.formdata["brand_id"]:"",
+                initialValue: t.props.typePopPu == "edit"?t.props.formdata["brand_id"]:[],
             })(
             <CheckboxGroup options={t.props.brandList}/>
         )}     
@@ -359,9 +385,9 @@ class ShopTypeForm extends React.Component {
                 )}     
                 </FormItem>
             </Col>
-            <Col span={9}>
+            <Col span={6}>
                 <FormItem
-                {...formLayout2}
+                {...formLayout3}
                 label="添加属性">
                   {getFieldDecorator('asort_order', {
                     initialValue: t.props.typePopPu == "edit"?t.props.formdata["sort_order"]:"",
@@ -370,7 +396,7 @@ class ShopTypeForm extends React.Component {
                 )}     
                 </FormItem>
             </Col>
-            <Col span={6}>
+            <Col span={6} >
                 <FormItem
                 {...formLayout}>
                   {getFieldDecorator('goods_attr_name', {
@@ -380,7 +406,7 @@ class ShopTypeForm extends React.Component {
                 )}     
                 </FormItem>
             </Col>
-            <Col span={6}>
+            <Col span={5}>
                 <FormItem
                 {...formLayout}>
                   {getFieldDecorator('goods_attr_value', {
@@ -390,11 +416,11 @@ class ShopTypeForm extends React.Component {
                 )}     
                 </FormItem>
             </Col>
-            <Col span={3}>
+            <Col span={3} style={{marginLeft:"4px"}}>
                 <FormItem
                 {...formLayout}>
                   {getFieldDecorator('ais_show', {
-                    initialValue: t.props.typePopPu == "edit"?t.props.formdata["ais_show"]:"",
+                    initialValue: t.props.typePopPu == "edit"?[t.props.formdata["ais_show"]]:[],
                 })(
                     <CheckboxGroup options={ops}/>
                 )}     
@@ -404,8 +430,8 @@ class ShopTypeForm extends React.Component {
         {
             t.state.sxarr.map(function(item,index){
                 if(item !='a'){
-                return  (<Row>
-            <Col span={6}></Col>
+                return  (<Row key={index}>
+            <Col span={4}></Col>
             <Col span={0}>
                 <FormItem>
                   {getFieldDecorator('goods_attr_id'+index, {
@@ -415,7 +441,7 @@ class ShopTypeForm extends React.Component {
                 )}     
                 </FormItem>
             </Col>
-            <Col span={2}>
+            <Col span={1} style={{width:"33px"}}>
                 <FormItem
                 {...formLayout}>
                   {getFieldDecorator('asort_order'+index, {
@@ -425,7 +451,7 @@ class ShopTypeForm extends React.Component {
                 )}     
                 </FormItem>
             </Col>
-            <Col span={5}>
+            <Col span={6} style={{marginLeft:"20px"}}>
                 <FormItem
                 {...formLayout}>
                   {getFieldDecorator('goods_attr_name'+index, {
@@ -445,11 +471,11 @@ class ShopTypeForm extends React.Component {
                 )}     
                 </FormItem>
             </Col>
-            <Col span={3}>
+            <Col span={3} style={{marginLeft:"4px"}}>
                 <FormItem
                 {...formLayout}>
                   {getFieldDecorator('ais_show'+index, {
-                    initialValue: t.props.typePopPu == "edit"?t.props.formdata['ais_show'+index]:"",
+                    initialValue: t.props.typePopPu == "edit"?[t.props.formdata['ais_show'+index]]:[],
                 })(
                     <CheckboxGroup options={ops}/>
                 )}     
@@ -466,7 +492,7 @@ class ShopTypeForm extends React.Component {
         <Row>
             <Col span={9}></Col>
             <Col span={9}>
-               <Button style={{'margin-bottom':'10px'}} type="dashed" onClick={t.addsx} icon="plus">添加属性</Button>
+               <Button style={{'marginBottom':'10px'}} type="dashed" onClick={t.addsx} icon="plus">添加属性</Button>
             </Col>
         </Row>
         <FormItem>
@@ -477,7 +503,7 @@ class ShopTypeForm extends React.Component {
                 )}     
         </FormItem>
         <FormItem
-                {...formItemLayout}
+                {...formLayout4}
                 label="自定义属性">
                   {getFieldDecorator('goods_type_custom', {
                     initialValue: t.props.typePopPu == "edit"?t.props.formdata["goods_type_custom"]:"",
@@ -488,8 +514,8 @@ class ShopTypeForm extends React.Component {
         {
             t.state.arr.map(function(item,index){
                 if(item !='a'){
-                    return (<Row>
-                        <Col span={6}></Col>
+                    return (<Row key={index}>
+                        <Col span={4}></Col>
                         <Col span={0}>
                             <FormItem>
                               {getFieldDecorator('goods_type_custom_id'+index, {
@@ -510,7 +536,7 @@ class ShopTypeForm extends React.Component {
                             </FormItem>
                         </Col>
                         <Col>
-                            <Button  onClick={t.removezd.bind(t,index)}>
+                            <Button  onClick={t.removezd.bind(t,index)} style={{marginLeft:"10px"}}>
                                 移除
                             </Button>
                         </Col>
@@ -521,13 +547,13 @@ class ShopTypeForm extends React.Component {
         <Row>
             <Col span={9}></Col>
             <Col span={9}>
-               <Button style={{'margin-bottom':'10px'}} type="dashed" onClick={t.addzd} icon="plus">添加自定义属性</Button>
+               <Button style={{'marginBottom':'10px'}} type="dashed" onClick={t.addzd} icon="plus">添加自定义属性</Button>
             </Col>
         </Row>
-        <FormItem>
+        <FormItem className="but">
             <Button key="back" size="large" onClick={this.props.cancel}>取消</Button>,
             <Button key="submit" type="primary" size="large"  onClick={this.props.ok.bind(this,t.props.current)}>
-                确认
+                <span style={{color:"#fff"}}>确认</span>
             </Button>
         </FormItem>
         </Form>
@@ -552,7 +578,7 @@ class Brand extends React.Component {
     componentDidMount(){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getList(obj,1,cb);
+        Actions.getList(obj,1);
         Actions.getCasListOne(obj);
         Actions.getBrandList(obj);
         Actions.getSpecList(obj);
@@ -568,7 +594,7 @@ class Brand extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorSuccess(obj,values,Actions, current,cb,t.state.removezdId,t.state.removesxId);
+                Actions.editorSuccess(obj,values,Actions, current,t.state.removezdId,t.state.removesxId);
             }
         });
 
@@ -580,7 +606,7 @@ class Brand extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addList(obj,values,Actions,cb);
+                Actions.addList(obj,values,Actions);
             }
         });
     }
@@ -595,13 +621,13 @@ class Brand extends React.Component {
     //修改
     amend(id){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.editorList(obj,id,cb);
+        Actions.editorList(obj,id);
     }
 
     //分页
     onChange(page){
         let token = sessionStorage.getItem("admin_token");
-        Actions.getBrandList(token,page,cb);
+        Actions.getBrandList(token,page);
     }
 
     //添加
@@ -618,6 +644,9 @@ class Brand extends React.Component {
         let t = this;
         return t.state.addVisible?<div>
         <Modal visible={true}
+        width = "650"
+        title = "添加商品类型"
+        wrapClassName = "modal_style"
         closable ={false}
         footer={null}
             >
@@ -637,7 +666,12 @@ class Brand extends React.Component {
     onpopup(){
         let t = this;
         return t.state.visible?<div>
-        <Modal visible={true} closable ={false} footer={null}>
+        <Modal visible={true} 
+            closable ={false} 
+            footer={null}
+            width = "650"
+            title = "修改商品类型"
+            wrapClassName = "modal_style">
             <ShopTypesForm  listOne={t.state['goods_class_list_one']}
                             listTwo={t.state['goods_class_list_two']}
                             listThree={t.state['goods_class_list_three']}

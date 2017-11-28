@@ -18,7 +18,7 @@ class OrderDetails extends React.Component {
         let {order_info,order_log,store_info} = this.props.allDetails;
         let arr =[],money=0;
          _.mapKeys(order_info.invoice_info, function(value, key) {
-            arr.push(<li style={{overflow:"hidden"}}>{key}：{value}</li>)
+            arr.push(<li key={key} style={{overflow:"hidden"}}>{key}：{value}</li>)
         });
         order_info.goods_list.map(function(item,index){
             money+=item.goods_price*item.goods_num;
@@ -116,7 +116,7 @@ class OrderDetails extends React.Component {
                                 <Breadcrumb className="bread_style">
                                     <Breadcrumb.Item>商品信息</Breadcrumb.Item>
                                 </Breadcrumb>
-                                <Table className="table_width" columns={columns} pagination={false} dataSource={order_info.goods_list}/>
+                                <Table className="table_width" columns={columns} pagination={false} dataSource={addKeyFun(order_info.goods_list)}/>
                             </div>
                             <p style={{textAlign:"right",paddingRight:"10px",marginTop:"20px"}}>订单总金额：<span className="span1">￥{money.toFixed(2)}</span></p>  
                             <p style={{textAlign:"right",marginBottom:"10px",paddingRight:"10px"}}>(运费：￥{order_info.shipping_fee})</p>

@@ -30,7 +30,7 @@ var Store =  Reflux.createStore({
         t.data.pattern = reg;
         t.updateComponent();
     },
-    onGetMenu:function(token,menuChangeList,cb){
+    onGetMenu:function(token,menuChangeList){
         let t = this;
         
         let obj = qs.stringify({
@@ -61,7 +61,7 @@ var Store =  Reflux.createStore({
         t.data.arr = arr;
         t.updateComponent();
     },
-    onGetQuitLoading:function(token,cb){
+    onGetQuitLoading:function(token){
         let t = this;
         
         let obj= qs.stringify({
@@ -85,7 +85,7 @@ var Store =  Reflux.createStore({
             }
         });
     },
-    onShowHtml:function(token,str,cb){
+    onShowHtml:function(token,str){
         let t = this;
         if(str == "修改信息"){
             let obj = qs.stringify({
@@ -111,7 +111,7 @@ var Store =  Reflux.createStore({
             t.updateComponent();
         }
     },
-    onSetAdminMessage:function(token,values,cb){
+    onSetAdminMessage:function(token,values){
         let t = this;
         
         let obj = qs.stringify({
@@ -135,7 +135,7 @@ var Store =  Reflux.createStore({
             }
         });
     },
-    onSetAdminPassword:function(token,values,cb){
+    onSetAdminPassword:function(token,values){
         let t = this;
        
         let obj = qs.stringify({

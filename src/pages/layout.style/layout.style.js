@@ -7,29 +7,11 @@ import ReactMixin from 'react-mixin';
 import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
-import { Table,Breadcrumb,Icon,Modal,Button, Form, Input, Tooltip,Select,message } from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button, Form, Input,Select } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-const cb =function(err){
-    message.error(err);
-}
-
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-    },
-};
-
 import './layout.style.less';
-
-
-
 
 //修改/添加公用表单
 class LayoutStyleForm extends React.Component {
@@ -37,9 +19,7 @@ class LayoutStyleForm extends React.Component {
         confirmDirty: false,
     };
 
-
     render() {
-
         let t = this;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -55,7 +35,7 @@ class LayoutStyleForm extends React.Component {
 
         return (
             <Form>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                     {getFieldDecorator('layout_style_id', {
                         initialValue: t.props.typePopPu == "edit"?t.props.formdata["layout_style_id"]:"",
                     })(
@@ -133,7 +113,7 @@ class LayoutStyle extends React.Component {
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
         let id = this.props.location.query.id;
-        Actions.getLayoutStyleList(obj,1,id,cb);
+        Actions.getLayoutStyleList(obj,1,id);
     }
     //取消
     handleCancel(){
@@ -146,7 +126,7 @@ class LayoutStyle extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorSuccess(obj,values,Actions,t.state.current,id,cb);
+                Actions.editorSuccess(obj,values,Actions,t.state.current,id);
             }
         });
     }
@@ -157,7 +137,7 @@ class LayoutStyle extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addLayoutStyle(obj,values,id,Actions,cb);
+                Actions.addLayoutStyle(obj,values,id,Actions);
             }
         });
     }
@@ -171,7 +151,7 @@ class LayoutStyle extends React.Component {
     //修改
     amend(id){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getEditorLayout(obj,id,cb);
+        Actions.getEditorLayout(obj,id);
     }
 
     //分页
@@ -190,7 +170,8 @@ class LayoutStyle extends React.Component {
         return t.state.addVisible?<div>
         <Modal visible={true}
                 closable ={false}
-                footer={null}>
+                footer={null}
+                title="添加板式">
             <LayoutStylesForm layoutId={t.props.location.query.id}  ok={this.addOk} cancel={this.handleCancel} adminGroupList = {t.state.adminGroupList}/>
             </Modal>
             </div>:"";
@@ -202,6 +183,7 @@ class LayoutStyle extends React.Component {
         <Modal visible={true}
         closable ={false}
         footer={null}
+        title="修改板式"
             >
             <LayoutStylesForm adminGroupList = {t.state.adminGroupList}
                             formdata = {t.state.editorOne}

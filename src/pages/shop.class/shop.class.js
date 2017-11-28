@@ -5,7 +5,7 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Breadcrumb,message,Button,Table,Form,Input,Checkbox,Modal} from 'antd';
+import { Breadcrumb,Button,Table,Form,Input,Modal} from 'antd';
 const FormItem = Form.Item;
 import './shop.class.less';
 
@@ -19,11 +19,6 @@ const formItemLayout = {
         sm: { span: 16 },
     },
 };
-
-const cb =function(err){
-    message.error(err);
-}
-
 
 //修改/添加公用表单
 class ShopClassForm extends React.Component {
@@ -43,11 +38,12 @@ class ShopClassForm extends React.Component {
             wrapClassName="shop_form"
             onCancel={this.props.cancel}
             closable ={false}
+            title = {t.props.typePopPu == "edit"?"修改店铺分类":"添加店铺分类"}
             onOk={this.props.ok.bind(this)}
             >
             <Form>
             <FormItem
-                {...formItemLayout}
+            style={{margin:0}}
             >
             {getFieldDecorator('store_class_id', {
                 initialValue: t.props.typePopPu == "edit"?t.props.formdata["store_class_id"]:"",
@@ -117,7 +113,7 @@ class ShopClass extends React.Component {
     componentDidMount(){
         let t = this;
         let token = sessionStorage.getItem("admin_token");
-        Actions.getList(token,1,cb);
+        Actions.getList(token,1);
     }  
 
     add(){
@@ -130,12 +126,12 @@ class ShopClass extends React.Component {
 
     amend(id){
         let token = sessionStorage.getItem("admin_token");
-        Actions.getEditorList(token,id,cb);
+        Actions.getEditorList(token,id);
     }
 
     onChange(page){
         console.log(page);
-        Actions.getList(token,page,cb);
+        Actions.getList(token,page);
     }
 
     handleCancel(){
@@ -147,7 +143,7 @@ class ShopClass extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addShopGrade(obj,values,Actions,cb);
+                Actions.addShopGrade(obj,values,Actions);
             }
         });
     }
@@ -157,7 +153,7 @@ class ShopClass extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorOk(obj,values,Actions,cb);
+                Actions.editorOk(obj,values,Actions);
             }
         });
     }

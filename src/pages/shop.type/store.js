@@ -30,7 +30,7 @@ var Store =  Reflux.createStore({
         t.data.addVisible = true;
         t.updateComponent();
     },
-    onGetList:function(token,page,cb){
+    onGetList:function(token,page){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -174,7 +174,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditorList:function(token,id,cb){
+    onEditorList:function(token,id){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -246,7 +246,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onAddList:function(token,values,Actions,cb){
+    onAddList:function(token,values,Actions){
         let t = this;
         let goods_name ='';
         if(values["goods_class_name3"]!=undefined){
@@ -275,10 +275,11 @@ var Store =  Reflux.createStore({
             if(typeof key == 'string'){
                 if(key.slice(0,key.length-1)=='ais_show'||key.slice(0,key.length)=='ais_show'){
                     let bs =parseInt(key.slice(-1))>=0?key.slice(-1):'';
+                    console.log(values[key]);
                     obj["goods_attr["+k+"][goods_attr_name]"] = values['goods_attr_name'+bs];
                     obj["goods_attr["+k+"][goods_attr_value]"] = values['goods_attr_value'+bs];
                     obj["goods_attr["+k+"][sort_order]"] = values['asort_order'+bs];
-                    obj["goods_attr["+k+"][is_show]"] = values[key];
+                    obj["goods_attr["+k+"][is_show]"] = values[key].length!=0?values[key][0]:"";
                     k++;
                 }
             }
@@ -306,7 +307,7 @@ var Store =  Reflux.createStore({
                     t.data.addVisible = false;
                     t.data['goods_class_list_two'] = [];
                     t.data['goods_class_list_three'] = [];
-                    Actions.getList(token,1,cb);
+                    Actions.getList(token,1);
                     t.updateComponent();
                 }else{
                     cb(result.error);
@@ -316,7 +317,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditorSuccess:function(token,values,Actions,page,cb,removezdId,removesxId){
+    onEditorSuccess:function(token,values,Actions,page,removezdId,removesxId){
         let t = this;
         let goods_name ='';
         if(values["goods_class_name3"]!=undefined){
@@ -358,10 +359,11 @@ var Store =  Reflux.createStore({
                 if(key.slice(0,key.length-1)=='goods_attr_name'||key.slice(0,key.length)=='goods_attr_name'){
 
                     let bs =parseInt(key.slice(-1))>=0?key.slice(-1):'';
+                    let length = values['ais_show'+bs].length-1;
                     obj["goods_attr["+k+"][goods_attr_name]"] = values[key];
                     obj["goods_attr["+k+"][goods_attr_value]"] = values['goods_attr_value'+bs];
                     obj["goods_attr["+k+"][sort_order]"] = values['asort_order'+bs];
-                    obj["goods_attr["+k+"][is_show]"] = values['ais_show'+bs];
+                    obj["goods_attr["+k+"][is_show]"] = values['ais_show'+bs][length]?values['ais_show'+bs][length]:"";
                     if(values['goods_attr_id'+bs]!=undefined){
                         obj["goods_attr["+k+"][goods_attr_id]"] = values['goods_attr_id'+bs];
                         obj["goods_attr["+k+"][form_submit]"] = 1;
@@ -398,7 +400,7 @@ var Store =  Reflux.createStore({
                     t.data.visible = false;
                     t.data['goods_class_list_two'] = [];
                     t.data['goods_class_list_three'] = [];
-                    Actions.getList(token,page,cb);
+                    Actions.getList(token,page);
                     t.updateComponent();
                 }else{
                     cb(result.error);

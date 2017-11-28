@@ -18,7 +18,7 @@ var Store =  Reflux.createStore({
         visible:false,
         findList:{}
     },
-    onGetList:function(token,page,cb){
+    onGetList:function(token,page){
         let t = this;
         let obj = qs.stringify({
             admin_token:token
@@ -44,7 +44,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onCancelOrder:function(token,id,Actions,cb){
+    onCancelOrder:function(token,id,Actions){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -58,7 +58,7 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
                 if(result.error == ""){
-                    Actions.getList(token,t.data.current,cb);
+                    Actions.getList(token,t.data.current);
                 }else{
                     cb(result.error);
                 }

@@ -19,7 +19,7 @@ var Store =  Reflux.createStore({
         editorList:{},
         editorVisible:false
     },
-    onGetList:function(token,page,cb){
+    onGetList:function(token,page){
         let t = this;
         let obj = qs.stringify({
             admin_token:token
@@ -31,7 +31,7 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
                 if(result.error ==""){
-                    t.data.list = result.data.store_list;
+                    t.data.list = addKeyFun(result.data.store_list);
                     t.data.total = result.ext["total_num"];
                     t.data.current = page;
                     t.updateComponent();
@@ -50,7 +50,7 @@ var Store =  Reflux.createStore({
         t.data.visible = true;
         t.updateComponent();
     },
-    onAddOwnStore:function(token,values,Actions,cb){
+    onAddOwnStore:function(token,values,Actions){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -66,7 +66,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error == ""){
                     t.data.visible = false;
-                    Actions.getList(token,1,cb);
+                    Actions.getList(token,1);
                     t.updateComponent();
                 }else{
                     cb(result.error);
@@ -76,7 +76,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onGetEditorList:function(token,id,cb){
+    onGetEditorList:function(token,id){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -101,7 +101,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditorOk:function(token,values,Actions,cb){
+    onEditorOk:function(token,values,Actions){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -123,7 +123,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error == ""){
                     t.data.editorVisible = false;
-                    Actions.getList(token,t.data.current,cb);
+                    Actions.getList(token,t.data.current);
                     t.updateComponent();
                 }else{
                     cb(result.error);

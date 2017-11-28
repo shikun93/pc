@@ -5,7 +5,7 @@ import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
 import {urlhttp,urlhttps} from '../../app/url';
-import { Breadcrumb,message,Button,Table,Form,Input,Radio,Modal,Upload,Switch} from 'antd';
+import { Breadcrumb,Button,Table,Form,Input,Radio,Modal,Upload,Switch} from 'antd';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 import './shop.member.less';
@@ -22,11 +22,6 @@ const formItemLayout = {
     },
 };
 
-const cb =function(err){
-    message.error(err);
-}
-
-
 //修改/添加公用表单
 class ShopMemberForm extends React.Component {
     state = {
@@ -36,7 +31,11 @@ class ShopMemberForm extends React.Component {
     componentDidMount(){
         let t = this;
         if(t.props.typePopPu == "edit"){
-            this.setState({imgValue1:t.props.formdata.member_avatar.url});
+            if(t.props.formdata.member_avatar){
+                this.setState({imgValue1:t.props.formdata.member_avatar.url});
+            }else{
+                this.setState({imgValue1:''});
+            }  
         }
     }
 
@@ -53,6 +52,14 @@ class ShopMemberForm extends React.Component {
 
     validatorMember(rule, value, callback){
         let token = sessionStorage.getItem("admin_token");
+        let t = this;
+        if(t.props.typePopPu == "edit"){
+            if(t.props.formdata[rule.field] === value){
+                callback();
+                return ;
+            }
+        }
+
         let obj = {
             admin_token:token,
         }
@@ -71,6 +78,7 @@ class ShopMemberForm extends React.Component {
                     callback(result.error);       
                 }
                 callback();
+                return ;
         }).catch(function(error){
             //console.log(error);
         });
@@ -95,7 +103,7 @@ class ShopMemberForm extends React.Component {
             >
             <Form>
             <FormItem
-                {...formItemLayout}
+            style={{margin:0}}
             >
             {getFieldDecorator('member_id', {
                 initialValue: t.props.typePopPu == "edit"?t.props.formdata["member_id"]:"",
@@ -114,7 +122,7 @@ class ShopMemberForm extends React.Component {
                 rules: [ {
                     required: true, message: 'Please input your member_name!',
                 },{
-                     validator:t.validatorMember
+                     validator:t.validatorMember.bind(t)
                 }],
             })(
                 <Input />
@@ -145,9 +153,7 @@ class ShopMemberForm extends React.Component {
                 rules: [ {
                     required: true, message: 'Please input your member_email!',
                 },{
-                    type: 'email', message: 'The input is not valid E-mail!',
-                },{
-                     validator:t.validatorMember
+                     validator:t.validatorMember.bind(t)
                 }],
             })(
                 <Input />
@@ -314,13 +320,10 @@ class ShopMember extends React.Component {
             
         };
     }
-    componentWillMount(){
-      
-    }
     componentDidMount(){
         let t = this;
         let token = sessionStorage.getItem("admin_token");
-        Actions.getList(token,1,cb);
+        Actions.getList(token,1);
     }  
 
     add(){
@@ -333,12 +336,12 @@ class ShopMember extends React.Component {
 
     amend(id){
         let token = sessionStorage.getItem("admin_token");
-        Actions.getEditorList(token,id,cb);
+        Actions.getEditorList(token,id);
     }
 
     onChange(page){
         
-        Actions.getList(token,page,cb);
+        Actions.getList(token,page);
     }
 
     handleCancel(){
@@ -350,7 +353,7 @@ class ShopMember extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addShopMember(obj,values,Actions,cb);
+                Actions.addShopMember(obj,values,Actions);
             }
         });
     }
@@ -360,7 +363,7 @@ class ShopMember extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorOk(obj,values,Actions,cb);
+                Actions.editorOk(obj,values,Actions);
             }
         });
     }

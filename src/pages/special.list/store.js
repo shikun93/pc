@@ -22,7 +22,7 @@ var Store =  Reflux.createStore({
         t.data.addVisible = true;
         t.updateComponent();
     },
-   onGetSpecialList:function(token,page,id,cb){
+   onGetSpecialList:function(token,page,id){
        let t = this;
        let obj = qs.stringify({
             admin_token:token,
@@ -37,7 +37,7 @@ var Store =  Reflux.createStore({
                return response.json();
            }).then(function(result){
             if(result.error==""){
-                t.data.list = result.data["special_list"];
+                t.data.list = addKeyFun(result.data["special_list"]);
                 t.data.total = result.ext["total_num"];
                 t.data.current = page;
                 t.updateComponent();
@@ -49,7 +49,7 @@ var Store =  Reflux.createStore({
            
        });
    },
-    onAddSpecialList:function(token,values,Actions,id,cb){
+    onAddSpecialList:function(token,values,Actions,id){
         let t = this;
         let starTtime =new Date(values["start_time"]);
         let startfullYear =starTtime.getFullYear();
@@ -86,7 +86,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error==""){
                     t.data.addVisible = false;
-                    Actions.getSpecialList(token,1,id,cb);
+                    Actions.getSpecialList(token,1,id);
                     t.updateComponent();
                 }else{
                     cb(result.error);
@@ -94,7 +94,7 @@ var Store =  Reflux.createStore({
             
         });
     },
-    onGetEditorSpecial:function(token,id,cb){
+    onGetEditorSpecial:function(token,id){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -116,7 +116,7 @@ var Store =  Reflux.createStore({
                 }
         });
     },
-    onEditorSuccess:function(token,values,Actions,page,id,cb){
+    onEditorSuccess:function(token,values,Actions,page,id){
         let t = this;
         let starTtime =new Date(values["start_time"]);
         let startfullYear =starTtime.getFullYear();
@@ -154,7 +154,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error==""){
                     t.data.visible = false;
-                    Actions.getSpecialList(token,page,id,cb);
+                    Actions.getSpecialList(token,page,id);
                     t.updateComponent();
                 }else{
                     cb(result.error);

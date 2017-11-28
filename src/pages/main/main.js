@@ -219,7 +219,7 @@ class Main extends React.Component {
     componentWillMount(){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getMenu(obj,t.menuChangeList.bind(t),cb);
+        Actions.getMenu(obj,t.menuChangeList.bind(t));
 
         let height = document.documentElement.clientHeight-50;
         t.setState({ height: height+"px" });
@@ -240,7 +240,7 @@ class Main extends React.Component {
 
     quitLoad(){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getQuitLoading(obj,cb);
+        Actions.getQuitLoading(obj);
     }
 
     onOpenChange(openKeys){
@@ -313,7 +313,7 @@ class Main extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.setAdminPassword(obj,values,cb);
+                Actions.setAdminPassword(obj,values);
             }
         });
     }
@@ -323,7 +323,7 @@ class Main extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.setAdminMessage(obj,values,cb);
+                Actions.setAdminMessage(obj,values);
             }
         });
 
@@ -361,12 +361,12 @@ class Main extends React.Component {
         </div>:"";
     }
     changePassword(e){
-        Actions.showHtml(null,e.target.innerHTML,cb);
+        Actions.showHtml(null,e.target.innerHTML);
     }
 
     changeMessage(e){
-        let obj = sessionStorage.getItem("admin_token",cb);
-        Actions.showHtml(obj,e.target.innerHTML,cb);
+        let obj = sessionStorage.getItem("admin_token");
+        Actions.showHtml(obj,e.target.innerHTML);
     }
     render() {
         let t = this;

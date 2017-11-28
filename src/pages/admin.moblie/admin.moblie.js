@@ -7,33 +7,17 @@ import ReactMixin from 'react-mixin';
 import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
-import { Table,Breadcrumb,Icon,Modal,Button, Form, Input, Tooltip,DatePicker,Radio,message} from 'antd';
+import { Table,Breadcrumb,Icon,Modal,Button, Form, Input,DatePicker,Radio} from 'antd';
 import moment from 'moment';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-    },
-};
-
 import './admin.moblie.less';
-
-const cb =function(err){
-    message.error(err);
-}
-
 
 //修改/添加公用表单
 class AdminForm extends React.Component {
     state = {
-        confirmDirty: false,
+        
     }; 
 
     render() {
@@ -51,7 +35,7 @@ class AdminForm extends React.Component {
         };
         return (
             <Form>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                 {getFieldDecorator('mobile_special_id', {
                     initialValue: t.props.typePopPu == "edit"?t.props.formdata["mobile_special_id"]:"",
                 })(
@@ -151,7 +135,7 @@ class AdminMoblie extends React.Component {
     componentDidMount(){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getAdminGroupList(obj,1,cb);
+        Actions.getAdminGroupList(obj,1);
     }
     //取消
     handleCancel(){
@@ -164,7 +148,7 @@ class AdminMoblie extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorSuccess(obj,values,Actions, t.state.current,cb);
+                Actions.editorSuccess(obj,values,Actions, t.state.current);
             }
         });
 
@@ -176,7 +160,7 @@ class AdminMoblie extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addList(obj,values,Actions,cb);
+                Actions.addList(obj,values,Actions);
             }
         });
     }
@@ -185,19 +169,19 @@ class AdminMoblie extends React.Component {
     remove(id){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
-        Actions.deleteOne(obj,id,Actions,t.state.current,cb);
+        Actions.deleteOne(obj,id,Actions,t.state.current);
     }
 
     //修改
     amend(id){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.editorList(obj,id,cb);
+        Actions.editorList(obj,id);
     }
 
     //分页
     onChange(page){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getAdminGroupList(obj,page,cb);
+        Actions.getAdminGroupList(obj,page);
     }
 
     //添加
@@ -211,6 +195,7 @@ class AdminMoblie extends React.Component {
         <Modal visible={true}
         closable ={false}
         footer={null}
+        title = "添加专题管理"
             >
             <AdminGroupForm  ok={this.addOk} cancel={this.handleCancel}/>
             </Modal>
@@ -223,6 +208,7 @@ class AdminMoblie extends React.Component {
         <Modal visible={true}
         closable ={false}
         footer={null}
+        title = "修改专题管理"
             >
             <AdminGroupForm formdata = {t.state.editorAdminData} ok={this.handleOk} cancel={this.handleCancel} typePopPu="edit"/>
             </Modal>

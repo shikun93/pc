@@ -24,7 +24,7 @@ var Store =  Reflux.createStore({
         t.data.addVisible = true;
         t.updateComponent();
     },
-    onGetList:function(token,page,cb,id){
+    onGetList:function(token,page,id){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -38,7 +38,7 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
                 if(result.error ==""){
-                    t.data.list = result.data["goods_spec_list"];
+                    t.data.list = addKeyFun(result.data["goods_spec_list"]);
                     t.data.total = result.ext["total_num"];
                     t.data.current = page;
                     t.updateComponent();
@@ -76,7 +76,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditorList:function(token,id,cb){
+    onEditorList:function(token,id){
         let t = this;
         let imgObj = [];
         let obj = qs.stringify({
@@ -102,7 +102,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onAddList:function(token,values,Actions,cb){
+    onAddList:function(token,values,Actions){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -118,7 +118,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error == ""){
                     t.data.addVisible = false;
-                    Actions.getList(token,1,cb);
+                    Actions.getList(token,1);
                     t.updateComponent();
                 }else{
                     cb(result.error);
@@ -128,7 +128,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditorSuccess:function(token,values,Actions,page,cb){
+    onEditorSuccess:function(token,values,Actions,page){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -146,7 +146,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error == ""){
                     t.data.visible = false;
-                    Actions.getList(token,page,cb);
+                    Actions.getList(token,page);
                     t.updateComponent();
                 }else{
                     cb(result.error);
@@ -156,7 +156,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onRemove:function(token,id,Actions,page,cb){
+    onRemove:function(token,id,Actions,page){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -170,7 +170,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error == ""){
                     t.data.visible = false;
-                    Actions.getList(token,page,cb);
+                    Actions.getList(token,page);
                     t.updateComponent();
                 }else{
                     cb(result.error);

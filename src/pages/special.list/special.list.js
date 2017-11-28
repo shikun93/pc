@@ -7,40 +7,20 @@ import ReactMixin from 'react-mixin';
 import {Link,hashHistory} from 'react-router';
 import Actions from './action';
 import Store from './store';
-import { Table,DatePicker,Breadcrumb,Icon,Modal,Button, Form, Input, Tooltip,Radio,message } from 'antd';
+import { Table,DatePicker,Breadcrumb,Icon,Modal,Button, Form, Input,Radio } from 'antd';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 import moment from 'moment';
 
-const cb =function(err){
-    message.error(err);
-}
-
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-    },
-};
-
 import './special.list.less';
-
-
-
 
 //修改/添加公用表单
 class SpecialListForm extends React.Component {
     state = {
-        confirmDirty: false,
+        
     };
 
-
     render() {
-
         let t = this;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -56,7 +36,7 @@ class SpecialListForm extends React.Component {
 
         return (
             <Form>
-            <FormItem {...formItemLayout}>
+            <FormItem style={{margin:0}}>
                     {getFieldDecorator('layout_special_id', {
                         initialValue: t.props.typePopPu == "edit"?t.props.formdata["layout_special_id"]:"",
                     })(
@@ -169,7 +149,7 @@ class SpecialList extends React.Component {
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
         let id = this.props.location.query.id;
-        Actions.getSpecialList(obj,1,id,cb);
+        Actions.getSpecialList(obj,1,id);
     }
     //取消
     handleCancel(){
@@ -182,7 +162,7 @@ class SpecialList extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.editorSuccess(obj,values,Actions,t.state.current,id,cb);
+                Actions.editorSuccess(obj,values,Actions,t.state.current,id);
             }
         });
     }
@@ -193,7 +173,7 @@ class SpecialList extends React.Component {
         let obj = sessionStorage.getItem("admin_token");
         this.props.form.validateFields(function(err,values){
             if(err==null){
-                Actions.addSpecialList(obj,values,Actions,id,cb);
+                Actions.addSpecialList(obj,values,Actions,id);
             }
         });
     }
@@ -201,7 +181,7 @@ class SpecialList extends React.Component {
     //修改
     amend(id){
         let obj = sessionStorage.getItem("admin_token");
-        Actions.getEditorSpecial(obj,id,cb);
+        Actions.getEditorSpecial(obj,id);
     }
 
     //分页
@@ -220,7 +200,8 @@ class SpecialList extends React.Component {
         return t.state.addVisible?<div>
         <Modal visible={true}
                 closable ={false}
-                footer={null}>
+                footer={null}
+                title="添加专题">
             <SpecialListsForm layoutStyleId={t.props.location.query.id}  ok={this.addOk} cancel={this.handleCancel} adminGroupList = {t.state.adminGroupList}/>
             </Modal>
             </div>:"";
@@ -232,6 +213,7 @@ class SpecialList extends React.Component {
         <Modal visible={true}
         closable ={false}
         footer={null}
+        title = "修改专题"
             >
             <SpecialListsForm adminGroupList = {t.state.adminGroupList}
                             formdata = {t.state.editorOne}

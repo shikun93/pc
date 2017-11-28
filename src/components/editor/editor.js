@@ -11,6 +11,7 @@ class Editor extends React.Component {
         this.state = {
         };
     }
+    onchange(){}
     componentDidMount(){
         let t =this;
         function kedit(kedit){
@@ -36,7 +37,7 @@ class Editor extends React.Component {
     render() {
         let t = this;
         return (
-            <textarea id="uppics" name="content" style={{"visibility":"hidden"}}>{t.props.editorsValue?t.props.editorsValue:""}</textarea>
+            <textarea id="uppics" name="content" style={{"visibility":"hidden"}} value={t.props.editorsValue?t.props.editorsValue:""} onChange={t.onchange}></textarea>
     );
     }
 }

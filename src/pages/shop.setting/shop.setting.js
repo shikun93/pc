@@ -246,7 +246,7 @@ class ShopSetting extends React.Component {
             <div className="shop_setting">
             <Breadcrumb className="bread_style">
             <Breadcrumb.Item><a href="">设置</a></Breadcrumb.Item>
-            <Breadcrumb.Item>促销设置</Breadcrumb.Item>
+            <Breadcrumb.Item>商城设置</Breadcrumb.Item>
             </Breadcrumb>
             <div>
                 <ShopSettingsForm  addOk={t.submitSetting} formdata={t.state.formObj}/>

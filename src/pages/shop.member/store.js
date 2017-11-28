@@ -17,10 +17,9 @@ var Store =  Reflux.createStore({
         total:1,
         visible:false,
         editorList:{},
-        editorVisible:false,
-       
+        editorVisible:false
     },
-    onGetList:function(token,page,cb){
+    onGetList:function(token,page){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -65,10 +64,12 @@ var Store =  Reflux.createStore({
         t.data.visible = true;
         t.updateComponent();
     },
-    onAddShopMember:function(token,values,Actions,cb){
+    onAddShopMember:function(token,values,Actions){
         let t = this;
-        let length = values.member_avatar.length-1;
-        values.member_avatar = values.member_avatar?values.member_avatar[length].response.data.url:'';
+        if(values.member_avatar){
+            let length = values.member_avatar.length-1;
+            values.member_avatar = values.member_avatar?values.member_avatar[length].response.data.url:'';
+        }
         values.admin_token = token;
         delete values.member_id;
         let obj = qs.stringify(values);
@@ -80,7 +81,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error == ""){
                     t.data.visible = false;
-                    Actions.getList(token,1,cb);
+                    Actions.getList(token,1);
                     t.updateComponent();
                 }else{
                     cb(result.error);
@@ -90,7 +91,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onGetEditorList:function(token,id,cb){
+    onGetEditorList:function(token,id){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -106,6 +107,7 @@ var Store =  Reflux.createStore({
                 if(result.error == ""){
                     let data = result.data;
                     if(data.member_avatar){
+
                         data.member_avatar = {
                             uid: 1,
                             status: 'done',
@@ -127,10 +129,12 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditorOk:function(token,values,Actions,cb){
+    onEditorOk:function(token,values,Actions){
         let t = this;
-        let length = values.member_avatar.length-1;
-        values.member_avatar = values.member_avatar?(values.member_avatar.url||values.member_avatar[length].response.data.url):'';
+        if(values.member_avatar){
+            let length = values.member_avatar.length-1;
+            values.member_avatar = values.member_avatar?(values.member_avatar.url||values.member_avatar[length].response.data.url):'';
+        }
         values.admin_token = token;
         values.inform_allow = values.inform_allow?1:0;
         values.is_allowtalk = values.is_allowtalk?1:0;
@@ -145,7 +149,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error == ""){
                     t.data.editorVisible = false;
-                    Actions.getList(token,t.data.current,cb);
+                    Actions.getList(token,t.data.current);
                     t.updateComponent();
                 }else{
                     cb(result.error);

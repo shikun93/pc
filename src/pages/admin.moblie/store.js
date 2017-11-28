@@ -26,7 +26,7 @@ var Store =  Reflux.createStore({
         t.data.addVisible = true;
         t.updateComponent();
     },
-    onGetAdminGroupList:function(token,page,cb){
+    onGetAdminGroupList:function(token,page){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -40,7 +40,7 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
                 if(result.error==""){
-                     t.data.list = result.data["mobile_special_list"];
+                     t.data.list = addKeyFun(result.data["mobile_special_list"]);
                     t.data.total = result.ext["total_num"];
                     t.data.current = page;
                     t.updateComponent();
@@ -54,7 +54,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditorList:function(token,id,cb){
+    onEditorList:function(token,id){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -79,7 +79,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onAddList:function(token,values,Actions,cb){
+    onAddList:function(token,values,Actions){
         let t = this;
         let starTtime =new Date(values["start_time"]);
         let startfullYear =starTtime.getFullYear();
@@ -115,7 +115,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error==""){
                     t.data.addVisible = false;
-                    Actions.getAdminGroupList(token,1,cb);
+                    Actions.getAdminGroupList(token,1);
                     t.updateComponent();
                 }else{
                     cb(result.error);
@@ -125,7 +125,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onEditorSuccess:function(token,values,Actions,page,cb){
+    onEditorSuccess:function(token,values,Actions,page){
         let t = this;
         let starTtime =new Date(values["start_time"]);
         let startfullYear =starTtime.getFullYear();
@@ -162,7 +162,7 @@ var Store =  Reflux.createStore({
             }).then(function(result){
                 if(result.error==""){
                     t.data.visible = false;
-                    Actions.getAdminGroupList(token,page,cb);
+                    Actions.getAdminGroupList(token,page);
                     t.updateComponent();
                 }else{
                     cb(result.error);
@@ -172,7 +172,7 @@ var Store =  Reflux.createStore({
             console.log(error);
         });
     },
-    onDeleteOne:function(token,id,Actions,page,cb){
+    onDeleteOne:function(token,id,Actions,page){
         let t = this;
         let obj = qs.stringify({
             admin_token:token,
@@ -185,7 +185,7 @@ var Store =  Reflux.createStore({
                 return response.json();
             }).then(function(result){
                 if(result.error==""){
-                    Actions.getAdminGroupList(token,page,cb);
+                    Actions.getAdminGroupList(token,page);
                     t.updateComponent();
                 }else{
                     cb(result.error);
