@@ -21,13 +21,7 @@ var Store =  Reflux.createStore({
             update:0
         };
         if(values){
-             obj.promotion_allow = values.promotion_allow;
-             obj.groupbuy_allow = values.groupbuy_allow;
-             obj.pointshop_isuse = values.pointshop_isuse;
-             obj.voucher_allow = values.voucher_allow;
-             obj.pointprod_isuse = values.pointprod_isuse;
-             obj.redpacket_allow = values.redpacket_allow;
-             obj.update = 1;
+            obj = Object.assign(values,{admin_token:token,update:1});
         }
         obj = qs.stringify(obj);
         fetch(urlhttp+"/admin.shop_setting/editpromotionsetting",{method:"post",body:obj,headers:{

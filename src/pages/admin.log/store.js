@@ -19,7 +19,6 @@ var Store =  Reflux.createStore({
     onGetAdminLog:function(token,values,page){
         let t = this;
         let arr = [];
-        
         let obj = qs.stringify({
             admin_token:token,
             admin_name:values.admin_name?values.admin_name:'',

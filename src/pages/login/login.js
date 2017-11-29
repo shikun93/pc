@@ -22,9 +22,6 @@ class Login extends React.Component{
 
         };
     }
-    componentWillMount(){
-        let t = this;
-    }
     componentDidMount(){
         let t = this;
         let arr = document.cookie.split(";");

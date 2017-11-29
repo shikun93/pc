@@ -34,7 +34,7 @@ class AdminPrinter extends React.Component {
           data:{"admin_token":obj}
           }
         return (
-            <div className="admin_import">
+            <div className="admin_printer">
                 <Breadcrumb className="bread_style">
                 <Breadcrumb.Item><a href="">打印机数据管理</a></Breadcrumb.Item>
                 <Breadcrumb.Item>打印机数据导入</Breadcrumb.Item>

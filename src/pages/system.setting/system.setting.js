@@ -139,7 +139,6 @@ class SystemSetting extends React.Component {
     settingEmail(){
         let token = sessionStorage.getItem("admin_token");
         this.props.form.validateFields((err, values) => {
-            console.log(err,values);
             if (!err) {
                 Actions.emailSetting(token,values,Actions,Modal);
             }
@@ -159,7 +158,7 @@ class SystemSetting extends React.Component {
         let t = this;
     
         return (
-            <div className="setting_image">
+            <div className="system_setting">
             <Breadcrumb className="bread_style">
             <Breadcrumb.Item><a href="">设置</a></Breadcrumb.Item>
             <Breadcrumb.Item>邮件设置</Breadcrumb.Item>

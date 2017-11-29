@@ -138,14 +138,9 @@ var Store =  Reflux.createStore({
     },
     onAddList:function(token,values,Actions){
         let t = this;
-        
-        let obj = qs.stringify({
-            admin_token:token,
-            admin_group_name:values.admin_group_name,
-            description:values.description,
-            rules:t.data.checkedKeys,
-            sort_order:values.sort_order
-        });
+        delete values.admin_group_id;
+        let obj = qs.stringify(Object.assign(values,{admin_token:token,rules:t.data.checkedKeys}));
+    
         fetch(urlhttp+"/admin.admin_group/addone",{method:"post",body:obj,headers:{
             "Content-Type":"application/x-www-form-urlencoded"
         }})
@@ -166,16 +161,7 @@ var Store =  Reflux.createStore({
     },
     onEditorSuccess:function(token,values,Actions,page){
         let t = this;
-        console.log(values);
-        let obj = qs.stringify({
-            admin_token:token,
-            admin_group_name:values.admin_group_name,
-            description:values.description,
-            rules:t.data.checkedKeys,
-            sort_order:values.sort_order,
-            admin_group_id:values.admin_group_id,
-            update:1
-        });
+        let obj = qs.stringify(Object.assign(values,{admin_token:token,rules:t.data.checkedKeys,update:1}));
         fetch(urlhttp+"/admin.admin_group/editone",{method:"post",body:obj,headers:{
             "Content-Type":"application/x-www-form-urlencoded"
         }})

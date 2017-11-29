@@ -17,17 +17,18 @@ var Store =  Reflux.createStore({
     onSiteSetting:function(token,values,Actions,Modal){
         let t = this;
         let obj;
-
         if(values){
-            obj = qs.stringify({
-                admin_token:token,
-                site_name:values.site_name,
-                icp_number:values.icp_number,
-                site_status:values.site_status?1:0,
-                closed_reason:values.closed_reason,
-                email_type:1,
-                update:1
-            }); 
+            // obj = qs.stringify({
+            //     admin_token:token,
+            //     site_name:values.site_name,
+            //     icp_number:values.icp_number,
+            //     site_status:values.site_status?1:0,
+            //     closed_reason:values.closed_reason,
+            //     email_type:1,
+            //     update:1
+            // }); 
+            values.site_status = values.site_status?1:0;
+            obj = qs.stringify(Object.assign(values,{admin_token:token,email_type:1,update:1}));
         }else{
             obj = qs.stringify({
                 admin_token:token,

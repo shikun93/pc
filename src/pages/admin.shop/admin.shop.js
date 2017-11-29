@@ -20,9 +20,6 @@ class Brand extends React.Component {
             
         };
     }
-    componentWillMount(){
-      
-    }
     componentDidMount(){
         let t = this;
         let obj = sessionStorage.getItem("admin_token");
@@ -44,7 +41,6 @@ class Brand extends React.Component {
                 Actions.editorSuccess(obj,values,Actions,t.state.current);
             }
         });
-
     }
 
     //确认添加
@@ -80,10 +76,6 @@ class Brand extends React.Component {
     //添加
     add(){
         Actions.addBut();
-    }
-
-    checkedValue(){
-        console.log(1);
     }
 
     getCalList(n,value){

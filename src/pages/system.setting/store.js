@@ -19,16 +19,8 @@ var Store =  Reflux.createStore({
         
         let obj;
         if(values){
-            obj = qs.stringify({
-                admin_token:token,
-                email_addr:values.email_addr,
-                email_host:values.email_host,
-                email_id:values.email_id,
-                email_pass:values.email_pass,
-                email_port:values.email_port,
-                email_type:1,
-                update:1
-            });
+            delete values.address;
+            obj = qs.stringify(Object.assign(values,{admin_token:token,email_type:1,update:1}));
         }else{
             obj = qs.stringify({
                 admin_token:token,

@@ -15,10 +15,9 @@ import './admin.log.less';
 
 //修改/添加公用表单
 class AdminLogForm extends React.Component {
-     state = {
-        confirmDirty: false,
-    };
+    state = {
 
+    };
 
     render() {
 
