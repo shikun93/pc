@@ -34,12 +34,12 @@ module.exports = {
         ]
     },
     //热启动配置
-    devServer:{
-       contentBase: "./dist",//本地服务器所加载的页面所在的目录
-       historyApiFallback: true,//不跳转
-       inline: true,//实时刷新
-       hot: true,
-    },
+    // devServer:{
+    //    contentBase: "./dist",//本地服务器所加载的页面所在的目录
+    //    historyApiFallback: true,//不跳转
+    //    inline: true,//实时刷新
+    //    hot: true,
+    // },
     postcss: [
         autoprefixer({
             browsers: ['last 2 versions', 'Firefox ESR', '> 1%', 'ie >= 8', 'iOS >= 8', 'Android >= 4']

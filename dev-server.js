@@ -1,3 +1,4 @@
+var opn = require('opn');
 var path = require('path');
 var express = require("express");
 var webpack = require("webpack");
@@ -19,11 +20,11 @@ var compiler = webpack(config);
 //    })
 //})
 
-app.use(webpackDevMiddleware(compiler,{
+var devMiddleware = webpackDevMiddleware(compiler,{
     publicPatch:"./",
     quiet:true
-}));
-
+});
+app.use(devMiddleware);
 app.use(webpackHotMiddleware(compiler));
 
 var staticPath = path.posix.join('/static')
@@ -31,6 +32,10 @@ app.use(staticPath, express.static('./static'))
 
 const apiProxy = proxy('/**/**',{ target: 'https://api.sjyprt.com',changeOrigin: true });//将服务器代理到localhost:8080端口上[本地服务器为localhost:3000]
 app.use(apiProxy);
+
+devMiddleware.waitUntilValid(()=>{
+	opn("http://localhost:8080/#/");
+})
 
 app.listen(8080,function(){
     console.log('Listening at http://localhost:8080');

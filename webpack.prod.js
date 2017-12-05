@@ -64,6 +64,7 @@ module.exports = {
             template:'index.html',
             chunks: ['vendors','index'],
             inject:true,
+            hash:true
             //favicon: './bitbug_favicon.ico'
            // excludeChunks:['vendors','index'] 不引入
         }),
